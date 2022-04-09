@@ -33,7 +33,7 @@ resource "proxmox_vm_qemu" "node" {
 
   disk {
     slot = 0
-    size = "25G"
+    size = "20G"
     type = "scsi"
     storage = "drive"
     iothread = 1
