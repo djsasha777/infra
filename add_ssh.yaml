@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Set authorized key for user copying it from current gns3 user.
+      authorized_key:
+         user: root
+         state: present
+         key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"

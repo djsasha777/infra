@@ -1,0 +1,11 @@
+[nodes]
+MASTER1 ansible_host=192.168.1.201    
+MASTER2 ansible_host=192.168.1.202 
+WORKER1 ansible_host=192.168.1.203 
+WORKER2 ansible_host=192.168.1.204
+WORKER3 ansible_host=192.168.1.205
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+ansible_user=gns3
+ansible_password=gns3
