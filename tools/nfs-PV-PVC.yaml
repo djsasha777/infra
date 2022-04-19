@@ -19,8 +19,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: nfs-share
-labels:
-  type: nfs
 spec:
   accessModes:
     - ReadWriteOnce
