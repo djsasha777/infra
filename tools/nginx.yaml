@@ -53,11 +53,8 @@ spec:
           mountPath: /etc/nginx/conf #mount htpasswd volume to /etc/nginc/conf
       volumes:
       - name: nginx-volume
-        persistentVolumeClaim:
-          claimName: nfs-share
-#        configMap:
-#          name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
-
+        configMap:
+          name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
       - name: nginx-htpasswd
         secret: 
           secretName: nginx-htpasswd      

@@ -1,27 +1,37 @@
+# NFS Persistent Volume
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-share 
+  name: nfs-storage-pv
   labels:
-    storage: nfs 
+    name: nfs-storage
 spec:
   capacity:
     storage: 1Gi
+  volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.1
   nfs:
-    server: 192.168.1.1
     path: /media/AiDisk_a1/myshare
-
+    server: 192.168.1.1
 ---
-kind: PersistentVolumeClaim
+# NFS Persistent Volume Claim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: nfs-share
+  name: nfs-storage
+# labels:
+#   share: "false"      # to mount sub path on PAI
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
+  volumeMode: Filesystem
   resources:
     requests:
-      storage: 1Gi
+      storage: 1Gi    # no more than PV capacity
+  selector:
+    matchLabels:
+      name: nfs-storage # corresponding to PV label
