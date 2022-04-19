@@ -47,7 +47,7 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-        - name: nginx-conf
+        - name: nginx-volume
           mountPath: /etc/nginx # mount nginx-conf volume to /etc/nginx
         - name: nginx-htpasswd
           mountPath: /etc/nginx/conf #mount htpasswd volume to /etc/nginc/conf
@@ -85,15 +85,5 @@ type: Opaque
 data:
   nginx-htpasswd: cGFzc3dvcmQK
 
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: nfs-share
-spec:
-  storageClassName: "nfs"
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+
+
