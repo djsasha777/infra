@@ -22,7 +22,6 @@ metadata:
 labels:
   type: nfs
 spec:
-  storageClassName: "nfs"
   accessModes:
     - ReadWriteOnce
   resources:
