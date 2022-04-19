@@ -72,3 +72,12 @@ spec:
     nodePort: 30001
   selector:
     app: nginx
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nginx-htpasswd
+type: Opaque
+data:
+  nginx-htpasswd: cGFzc3dvcmQK
