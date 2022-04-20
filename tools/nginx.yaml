@@ -1,4 +1,4 @@
-#SIMPLE NGINX SERVER
+#SIMPLE NGINX SERVER with AUTHENTICATION
 ---
 apiVersion: v1
 kind: ConfigMap

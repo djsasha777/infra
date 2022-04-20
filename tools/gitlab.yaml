@@ -105,7 +105,7 @@ spec:
           value: "false"
         ports:
         - name: http
-          containerPort: 80
+          containerPort: 8085
         - name: ssh
           containerPort: 22
 
@@ -118,7 +118,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /users/sign_in
-            port: 80
+            port: 8085
           initialDelaySeconds: 15
           timeoutSeconds: 1
         volumeMounts:
@@ -149,7 +149,7 @@ spec:
       port: 22
       targetPort: ssh
     - name: http
-      port: 80
+      port: 8085
       targetPort: http
 
 ---

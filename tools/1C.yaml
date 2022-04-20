@@ -1,14 +1,8 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: 1C
-
 ---
 kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: 1C-server-home
-  namespace: 1C
   labels:
     type: local
     app: 1C
@@ -26,7 +20,6 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: 1C-server-logs
-  namespace: 1C
   labels:
     type: local
     app: 1C
@@ -44,7 +37,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: 1C-server-home
-  namespace: 1C
   labels:
     app: 1C
     type: local
@@ -61,7 +53,6 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: 1C-server-logs
-  namespace: 1C
   labels:
     app: 1C
     type: local
@@ -78,7 +69,6 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: 1C-postgres-pv
-  namespace: 1C
   labels:
     app: postgres
     type: local
@@ -96,7 +86,6 @@ kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
   name: 1C-microk8s-hostpath
-  namespace: 1C
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
 provisioner: microk8s.io/hostpath
@@ -106,7 +95,6 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: 1C-postgres-pv-claim
-  namespace: 1C
   labels:
     app: postgres
 spec:
@@ -123,7 +111,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgres-configuration
-  namespace: 1C
   labels:
     app: postgres
 data:
@@ -136,7 +123,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-service
-  namespace: 1C
   labels:
     app: postgres
 spec:
@@ -152,7 +138,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres-statefulset
-  namespace: 1C
   labels:
     app: postgres
 spec:
@@ -188,7 +173,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: 1C-deployment
-  namespace: 1C
   labels:
     name: 1C
     app: 1C
@@ -261,7 +245,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: 1C-service
-  namespace: 1C
   labels:
     name: 1C
     app: 1C
@@ -415,7 +398,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: 1C-web-deployment
-  namespace: 1C
   labels:
     name: 1C-web
     app: 1C-web
@@ -433,14 +415,13 @@ spec:
       - name: 1C-server
         image: djsasha777/1s-web-server:2
         ports:
-        - containerPort: 80
+        - containerPort: 8082
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: 1C-web-service
-  namespace: 1C
   labels:
     name: 1C-web
     app: 1C-web
@@ -451,7 +432,7 @@ spec:
   ports:
     - name: port80
       protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 8082
+      targetPort: 8082
       nodePort: 30580
 
