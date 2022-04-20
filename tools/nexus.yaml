@@ -1,4 +1,35 @@
 ---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: my-nexus-pv
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/nexus"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-nexus-pvc
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,8 +54,8 @@ spec:
               mountPath: /nexus-data
       volumes:
         - name: nexus-data
-          emptyDir: {}
-
+          persistentVolumeClaim:
+            claimName: my-nexus-pvc
 ---
 apiVersion: v1
 kind: Service

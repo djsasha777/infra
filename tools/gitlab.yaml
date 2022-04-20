@@ -1,5 +1,5 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gitlab
@@ -152,14 +152,32 @@ spec:
       port: 8085
       targetPort: http
 
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: my-gitlab-pv
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/gitlab"
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: gitlab-persistent-storage
   labels:
-    app: gitlab-persistent-storage
+    type: local
 spec:
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   resources:

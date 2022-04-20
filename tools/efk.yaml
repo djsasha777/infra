@@ -72,10 +72,10 @@ spec:
         app: elasticsearch
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      # storageClassName: ""
+      storageClassName: "local-storage"
       resources:
         requests:
-          storage: 3Gi
+          storage: 1Gi
 
 ---
 kind: Service
@@ -160,7 +160,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: fluentd
-  namespace: default
+  namespace: tools #specifi namespace
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -210,7 +210,7 @@ spec:
     spec:
       containers:
       - name: kibana
-        image: docker.elastic.co/kibana/kibana:7.5.0
+        image: docker.elastic.co/kibana/kibana:lts
         resources:
           limits:
             cpu: 1000m
@@ -232,6 +232,6 @@ spec:
     app: kibana
   type: NodePort  
   ports:
-    - port: 8080
+    - port: 8090
       targetPort: 5601 
-      nodePort: 30000
+      nodePort: 32090

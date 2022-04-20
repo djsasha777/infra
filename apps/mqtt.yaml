@@ -68,4 +68,4 @@ spec:
   - name: mosquitto
     port: 8083
     targetPort: 1883
-    nodePort: 32007
+    nodePort: 32083
