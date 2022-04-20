@@ -1,4 +1,4 @@
-# NFS Persistent Volume
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -17,21 +17,19 @@ spec:
   nfs:
     path: /media/AiDisk_a1/myshare
     server: 192.168.1.1
+
 ---
-# NFS Persistent Volume Claim
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: nfs-storage
-# labels:
-#   share: "false"      # to mount sub path on PAI
 spec:
   accessModes:
     - ReadWriteMany
   volumeMode: Filesystem
   resources:
     requests:
-      storage: 1Gi    # no more than PV capacity
+      storage: 1Gi    
   selector:
     matchLabels:
-      name: nfs-storage # corresponding to PV label
+      name: nfs-storage 

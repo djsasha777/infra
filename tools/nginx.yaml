@@ -22,9 +22,19 @@ data:
               index  index.html index.htm;
           }
           auth_basic "Secure Site";
-          auth_basic_user_file conf/.htpasswd;
+          auth_basic_user_file conf/htpasswd;
         }
     }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-htpasswd
+data:
+  htpasswd: |
+    root:$apr1$91kF9CbQ$yqJvNIZkWMMXM6h/6RVZJ0  
+# echo password | openssl passwd -apr1 -stdin
 
 ---
 apiVersion: apps/v1
@@ -56,8 +66,8 @@ spec:
         configMap:
           name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
       - name: nginx-htpasswd
-        secret: 
-          secretName: nginx-htpasswd      
+        configMap: 
+          name: nginx-htpasswd      
 
 ---
 apiVersion: v1
@@ -73,14 +83,6 @@ spec:
   selector:
     app: nginx
 
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: nginx-htpasswd
-data:
-  .htpasswd: |
-    root:$apr1$91kF9CbQ$yqJvNIZkWMMXM6h/6RVZJ0
 
 
 
