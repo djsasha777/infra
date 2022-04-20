@@ -4,7 +4,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-storage-pv
   labels:
-    name: nfs-storage
+    name: my-nfs-storage
 spec:
   capacity:
     storage: 1Gi
@@ -32,4 +32,4 @@ spec:
       storage: 1Gi    
   selector:
     matchLabels:
-      name: nfs-storage 
+      name: my-nfs-storage 
