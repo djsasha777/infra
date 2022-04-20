@@ -112,7 +112,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /users/sign_in
-            port: 80
+            port: 8085
           initialDelaySeconds: 180
           timeoutSeconds: 15
         readinessProbe:
