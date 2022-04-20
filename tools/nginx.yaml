@@ -75,12 +75,12 @@ spec:
 
 ---
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
   name: nginx-htpasswd
-type: Opaque
 data:
-  nginx-htpasswd: cGFzc3dvcmQK
+  .htpasswd: |
+    root:$apr1$91kF9CbQ$yqJvNIZkWMMXM6h/6RVZJ0
 
 
 
