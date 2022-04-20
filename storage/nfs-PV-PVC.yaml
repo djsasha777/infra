@@ -1,35 +1,35 @@
 ---
-apiVersion: v1
-kind: PersistentVolume
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
 metadata:
-  name: nfs-storage-pv
-  labels:
-    name: my-nfs-storage
-spec:
-  capacity:
-    storage: 1Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  mountOptions:
-    - nfsvers=4.1
-  nfs:
-    path: /media/AiDisk_a1/myshare
-    server: 192.168.1.1
+  name: nfs
+provisioner: kubernetes.io/fake-nfs
 
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: nfs-storage
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs
+  nfs:
+    server: 192.168.1.1
+    path: /media/AiDisk_a1/myshare
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-pvc
 spec:
   accessModes:
     - ReadWriteMany
-  volumeMode: Filesystem
+  storageClassName: nfs
   resources:
     requests:
-      storage: 1Gi    
-  selector:
-    matchLabels:
-      name: my-nfs-storage 
+      storage: 1Gi
+
