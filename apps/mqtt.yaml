@@ -56,24 +56,16 @@ spec:
             secretName: mosquitto-secret-file
 
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: mosquitto
-  labels:
-    app: mosquitto
+  name: mosquitto-svc
 spec:
-  replicas: 1
+  type: NodePort
   selector:
-    matchLabels:
-      app: mosquitto
-  template:
-    metadata:
-      labels:
-        app: mosquitto
-    spec:
-      containers:
-        - name: mosquitto
-          image: eclipse-mosquitto:1.6.2
-          ports:
-            - containerPort: 1883
+    app: mosquitto
+  ports:
+  - name: mosquitto
+    port: 8083
+    targetPort: 1883
+    nodePort: 32007
