@@ -8,8 +8,8 @@ terraform {
 }
 
 provider "proxmox" {
-  #pm_api_url = "https://172.22.6.144:8006/api2/json"
-  pm_api_url = "https://192.168.1.188:8006/api2/json"
+  pm_api_url = "https://172.22.6.144:8006/api2/json"
+  #pm_api_url = "https://192.168.1.188:8006/api2/json"
   pm_api_token_id = "kube@pam!kubetoken"
   pm_api_token_secret = "9e156aa5-09fd-47d9-a58d-8ac8627cb789"
   pm_tls_insecure = true
@@ -75,7 +75,7 @@ resource "proxmox_vm_qemu" "lb" {
 
   disk {
     slot = 0
-    size = "5"
+    size = "5G"
     type = "scsi"
     storage = "drive"
     iothread = 1
