@@ -1,0 +1,58 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: my-jenkins-pv
+  labels:
+    type: local
+spec:
+  storageClassName: my-local-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/jenkinspv"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-jenkins-pvc
+  labels:
+    type: local
+spec:
+  storageClassName: my-local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-nfs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: my-nfs
+  nfs:
+    server: 192.168.1.1
+    path: /media/AiDisk_a1/myshare
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: my-nfs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: my-nfs
+  resources:
+    requests:
+      storage: 1Gi
