@@ -140,6 +140,7 @@ metadata:
   name: gitlab
   labels:
     name: gitlab
+    app: gitlab
 spec:
   type: NodePort
   selector:
