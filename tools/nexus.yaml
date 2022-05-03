@@ -59,14 +59,14 @@ spec:
             - name: NEXUS_SEARCH_INDEX_REBUILD_ON_STARTUP
               value: "true"
             - name: INSTALL4J_ADD_VM_PARAMS
-              value: "-Xms1g -Xmx2g -XX:MaxDirectMemorySize=2g -Djava.util.prefs.userRoot=${NEXUS_DATA}/javaprefs"
-          resources:
-            requests:
-              cpu: "0.25"
-              memory: "512M"
-            limits:
-              cpu: "0.5"
-              memory: "2304M"
+              value: "-Xms2703m -Xmx2703m -XX:MaxDirectMemorySize=2703m -Djava.util.prefs.userRoot=/some-other-dir"
+          # resources:
+          #   requests:
+          #     cpu: "1"
+          #     memory: "799M"
+          #   limits:
+          #     cpu: "2"
+          #     memory: "800M"
           ports:
             - containerPort: 8081
           volumeMounts:
