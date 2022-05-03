@@ -1,42 +1,20 @@
-# PROXBOX
+# PROXBOX project
 
 Install HA Kubernetes cluster with kubespray and terraform on proxmox
-
-# ADD and configure proxmox template
-
-# Kubernetes on Proxmox
-
-Using Terraform and Ansible to provision Proxmox VMs and configure a highly available Kubernetes cluster with co-located control plane nodes and etcd members.
-
-## Features
-
-- Two `gateways` LXC machines for the DNS servers and the load balancers of kube-apiserver
-- Three `masters` QEMU VM machines for the Kubernetes control-plane nodes
-- Three `workers` QEMU VM machines for the Kubernetes worker nodes
-- Setup NAT gateway with the assigned public IP on the first `gateways` machine
-- Disable swap and ensure iptables see bridged traffic for `masters` and `workers`
-- Install QEMU guest agent, setup timezone, disable SSH password and IPv6
-- Setup SSH key, configure root password and use `terraform` as default sudo user
 
 ## Prerequisite
 
 Terraform and Ansible is required to run the provisioning and configuration tasks. You may install them on macOS using Homebrew.
 
-```bash
-brew install terraform ansible
-```
+    brew install terraform ansible python3
 
 Alternatively you may prepare your Ansible environment using `virtualenv`.
 
-```bash
-# Use python3 instead of the default python come with macOS
-brew install python3
-
-# Install virtualenv with pip3
-pip3 install virtualenv
+    pip3 install virtualenv
 
 # Create new python virtual environment in .ansible directory
-virtualenv .ansible
+    
+    virtualenv .ansible
 
 # Activate the virtual environment according to your shell (e.g. fish)
 . .ansible/bin/activate.fish
@@ -123,37 +101,10 @@ qm template 9000
 
 ## Get Started
 
-Provision all the machines using Terraform.
-
-```bash
-# Navigate to the Terraform directory
-cd terraform
-
-# Initialize the Terraform state (on S3) and plugin
-terraform init
 
 # Set the one-time password for Proxmox API authentication
-export PM_OTP=xxxxx
 
-# Check the resources to be created (optional)
-terraform plan
-
-# Apply the provisioning
-terraform apply
-```
-
-Configure the Kubernetes cluster using Ansible with or without tags.
-
-```bash
-# Navigate to the Ansible directory
-cd ansible
-
-# Run the Ansible kubernetes playbook on inventory file
-ansible-playbook -i inventories/sd-51798 kubernetes.yml
-
-# Re-run playbook with tags if necessary (gateway/named/loadbalancer/common/runtime/kubeadm)
-ansible-playbook -i inventories/sd-51798 kubernetes.yml -t <tags>
-```
+    export PM_OTP=xxxxx
 
 # ADD virtual maschines using terraform
 
@@ -210,8 +161,8 @@ configure keepalived: On both nodes create the health check script /etc/keepaliv
     }
 
     curl --silent --max-time 2 --insecure https://localhost:6443/ -o /dev/null || errorExit "Error GET https://localhost:6443/"
-    if ip addr | grep -q 172.16.16.100; then
-    curl --silent --max-time 2 --insecure https://172.16.16.100:6443/ -o /dev/null || errorExit "Error GET https://172.16.16.100:6443/"
+    if ip addr | grep -q 192.168.1.220; then
+    curl --silent --max-time 2 --insecure https://192.168.1.220:6443/ -o /dev/null || errorExit "Error GET https://192.168.1.220:6443/"
     fi
     EOF
 
@@ -240,7 +191,7 @@ Create keepalived config /etc/keepalived/keepalived.conf
             auth_pass mysecret
         }
         virtual_ipaddress {
-            172.16.16.100
+            192.168.1.220
         }
         track_script {
             check_apiserver
@@ -270,8 +221,8 @@ Update /etc/haproxy/haproxy.cfg
     mode tcp
     option ssl-hello-chk
     balance roundrobin
-        server kmaster1 172.16.16.101:6443 check fall 3 rise 2
-        server kmaster2 172.16.16.102:6443 check fall 3 rise 2
+        server kmaster1 192.168.1.201:6443 check fall 3 rise 2
+        server kmaster2 192.168.1.202:6443 check fall 3 rise 2
 
     EOF
 
