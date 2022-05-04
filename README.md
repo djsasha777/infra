@@ -210,7 +210,7 @@ Update /etc/haproxy/haproxy.cfg
     cat >> /etc/haproxy/haproxy.cfg <<EOF
 
     frontend kubernetes-frontend
-    bind *:6443
+    bind *:8383
     mode tcp
     option tcplog
     default_backend kubernetes-backend
