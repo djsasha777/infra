@@ -144,6 +144,12 @@ Deploy Kubespray with Ansible Playbook - run the playbook as root The option --b
     ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml
 
 
+# connect to kube
+
+    scp root@192.168.1.201:/etc/kubernetes/admin.conf .
+
+    export KUBECONFIG=$KUBECONFIG:admin.conf
+
 # Set up load balancer nodes (lb-0 & lb-1)
 
 Install Keepalived & Haproxy
@@ -182,7 +188,7 @@ Create keepalived config /etc/keepalived/keepalived.conf
 
     vrrp_instance VI_1 {
         state BACKUP
-        interface eth1
+        interface eth0
         virtual_router_id 1
         priority 100
         advert_int 5
