@@ -281,3 +281,16 @@ Connect to cluster using generated files:
     --client-key=user1.key \
 
 
+
+
+
+
+
+ssh -L 8383:192.168.1.220:8383 -i newkey root@172.22.130.145
+
+cd PROXBOX
+export KUBECONFIG=$KUBECONFIG:kubeconfig 
+alias kubectl='kubectl --insecure-skip-tls-verify'
+kubectl cluster-info
+
+insecure-skip-tls-verify: true
