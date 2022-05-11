@@ -45,10 +45,14 @@
         src: templates/check_apiserver.sh.j2
         dest: /etc/keepalived/check_apiserver.sh
 
-    - name: Ensure keepalived and haproxy is started
+    - name: Ensure haproxy is started
       service:  
-        name: 
-          - keepalived
-          - haproxy
+        name: haproxy
+        state: started
+        enabled: yes
+
+    - name: Ensure keepalived is started
+      service:  
+        name: keepalived
         state: started
         enabled: yes
