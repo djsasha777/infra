@@ -1,0 +1,30 @@
+global
+    daemon
+    maxconn 50000
+    stats socket /var/lib/haproxy/haproxy.sock mode 0600 level admin
+defaults
+    timeout connect 5000ms
+    timeout client 50000ms
+    timeout server 50000ms
+
+frontend kubernetes-frontend
+    bind *:{{ bind_port }}
+    mode tcp
+    option tcplog
+    default_backend kubernetes-backend
+
+backend kubernetes-backend
+    option httpchk GET /healthz
+    http-check expect status 200
+    mode tcp
+    option ssl-hello-chk
+    balance roundrobin
+        server kmaster1 {{ masterip1 }}:6443 check fall 3 rise 2
+        server kmaster2 {{ masterip2 }}:6443 check fall 3 rise 2
+
+listen stats :9000        
+   mode http
+   stats enable
+   stats realm Haproxy\ Statistics
+   stats uri /
+   stats auth haproxy:ju
