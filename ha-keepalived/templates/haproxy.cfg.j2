@@ -7,22 +7,20 @@ defaults
     timeout client 50000ms
     timeout server 50000ms
 
-frontend front_in
-    bind {{ haproxy_bind_address }}:80
-    ##  SSL binding ##
-    # bind {{ haproxy_bind_address }}:443 ssl crt /etc/ssl/certs/server.pem
-    maxconn 30000
-    default_backend ju_backend
+frontend kubernetes-frontend
+    bind *:8383
+    mode tcp
+    option tcplog
+    default_backend kubernetes-backend
 
-backend ju_backend
-    mode http 
-    ##  Force SSL ##
-    # redirect scheme https if !{ ssl_fc }
+backend kubernetes-backend
+    option httpchk GET /healthz
+    http-check expect status 200
+    mode tcp
+    option ssl-hello-chk
     balance roundrobin
-{% for balancing_server in haproxy_balancing_servers %}
-    server {{ balancing_server.name }} {{ balancing_server.ip }}:8080 maxconn 30000 check inter 2000 rise 2 fall 5
-{% endfor %}
-    option forwardfor
+        server kmaster1 192.168.1.201:6443 check fall 3 rise 2
+        server kmaster2 192.168.1.202:6443 check fall 3 rise 2
 
 listen stats :8181        
    mode http
