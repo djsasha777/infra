@@ -8,7 +8,7 @@ defaults
     timeout server 50000ms
 
 frontend kubernetes-frontend
-    bind *:8383
+    bind *:{{ bind_port }}
     mode tcp
     option tcplog
     default_backend kubernetes-backend
@@ -19,10 +19,10 @@ backend kubernetes-backend
     mode tcp
     option ssl-hello-chk
     balance roundrobin
-        server kmaster1 192.168.1.201:6443 check fall 3 rise 2
-        server kmaster2 192.168.1.202:6443 check fall 3 rise 2
+        server kmaster1 {{ masterip1 }}:6443 check fall 3 rise 2
+        server kmaster2 {{ masterip2 }}:6443 check fall 3 rise 2
 
-listen stats :8181        
+listen stats :9000        
    mode http
    stats enable
    stats realm Haproxy\ Statistics

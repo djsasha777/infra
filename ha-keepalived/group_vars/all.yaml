@@ -1,7 +1,7 @@
 ---
 bind_interface: eth0
 vip: 192.168.1.220
-haproxy_user: haproxy
-haproxy_balancing_servers:
-  - { name: 's1', ip: "192.168.1.221" }
-  - { name: 's2', ip: "192.168.1.222" }
+bind_port: 8383
+keepalived_secret: password
+masterip1: 192.168.1.221
+masterip2: 192.168.1.222

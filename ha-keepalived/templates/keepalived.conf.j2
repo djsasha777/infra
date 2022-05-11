@@ -23,16 +23,16 @@ vrrp_script check_apiserver {
 
     vrrp_instance VI_1 {
         state BACKUP
-        interface eth0
+        interface {{ bind_interface }}
         virtual_router_id 1
         priority 100
         advert_int 5
         authentication {
             auth_type PASS
-            auth_pass mysecret
+            auth_pass {{ keepalived_secret }}
         }
         virtual_ipaddress {
-            192.168.1.220
+            {{ vip }}
         }
         track_script {
             check_apiserver
