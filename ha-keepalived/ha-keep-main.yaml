@@ -30,9 +30,6 @@
         - keepalived
       when: ansible_os_family == "Debian"
 
-    - name: Ensure haproxy user is enabled
-      user: name={{ haproxy_user }} shell=/sbin/nologin
-
     - name: Ensure haproxy conf is set
       template: 
         src=templates/haproxy.cfg.j2 
