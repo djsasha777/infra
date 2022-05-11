@@ -32,27 +32,23 @@
 
     - name: Ensure haproxy conf is set
       template: 
-        src=templates/haproxy.cfg.j2 
-        dest=/etc/haproxy/haproxy.cfg
-
-    - name: Ensure haproxy is started
-      service: 
-        name=haproxy 
-        state=started
-        enabled=yes
+        src: templates/haproxy.cfg.j2 
+        dest: /etc/haproxy/haproxy.cfg
 
     - name: Ensure keepalived conf is set
       template: 
-        src=templates/keepalived.conf.j2
-        dest=/etc/keepalived/keepalived.conf
+        src: templates/keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
 
     - name: Ensure keepalived check set
       template: 
-        src=templates/check_apiserver.sh.j2
-        dest=/etc/keepalived/check_apiserver.sh
+        src: templates/check_apiserver.sh.j2
+        dest: /etc/keepalived/check_apiserver.sh
 
-    - name: Ensure keepalived is started
+    - name: Ensure keepalived and haproxy is started
       service:  
-        name=keepalived
-        state=started
-        enabled=yes
+        name: 
+          - keepalived
+          - haproxy
+        state: started
+        enabled: yes
