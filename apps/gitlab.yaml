@@ -2,11 +2,11 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: my-gitlab-pv
+  name: gitlab-pv
   labels:
     type: local
 spec:
-  storageClassName: local-storage
+  storageClassName: my-local-storage
   capacity:
     storage: 1Gi
   accessModes:
@@ -18,11 +18,11 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: gitlab-persistent-storage
+  name: gitlab-pvc
   labels:
     type: local
 spec:
-  storageClassName: local-storage
+  storageClassName: my-local-storage
   accessModes:
     - ReadWriteOnce
   resources:
@@ -35,6 +35,10 @@ kind: Deployment
 metadata:
   name: gitlab
 spec:
+  selector:
+    matchLabels:
+      name: gitlab
+      app: gitlab
   replicas: 1
   template:
     metadata:
