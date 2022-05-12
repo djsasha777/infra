@@ -47,10 +47,3 @@ backend kubernetes-backend
     balance roundrobin
         server kmaster1 {{ masterip1 }}:6443 check fall 3 rise 2
         server kmaster2 {{ masterip2 }}:6443 check fall 3 rise 2
-
-listen stats :9000        
-   mode http
-   stats enable
-   stats realm Haproxy\ Statistics
-   stats uri /
-   stats auth haproxy:ju
