@@ -1,8 +1,6 @@
-# PROXBOX project
+# PROXBOX project - kubernetes on proxmox
 
-Install HA Kubernetes cluster with kubespray and terraform on proxmox
-
-## Prerequisite
+Prerequisite
 
 Terraform and Ansible is required to run the provisioning and configuration tasks. You may install them on macOS using Homebrew.
 
@@ -114,6 +112,22 @@ qm template 9000
 
     terraform apply
 
+# Install load balancer with ansible scripts
+
+    cd loadbalancers/ha
+
+    terraform init
+
+    terraform plan
+
+    terraform apply
+
+chech ansible variables in group_vars/all.yaml
+
+install and configure haproxy and keepalived
+
+    ansible-playbook ha-keep-main
+
 # Install k8s using kubespray
 
 Clone kubespray git
@@ -144,153 +158,16 @@ Deploy Kubespray with Ansible Playbook - run the playbook as root The option --b
     ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml
 
 
-# connect to kube
+# connect to kubernetes with kubeconfig
 
-    scp root@192.168.1.201:/etc/kubernetes/admin.conf .
+copy kubernetes config
 
-    export KUBECONFIG=$KUBECONFIG:admin.conf
+    scp root@192.168.1.201:/etc/kubernetes/admin.conf ~/.kube/config
 
-# Set up load balancer nodes (lb-0 & lb-1)
+add zerotier address to hosts file
 
-Install Keepalived & Haproxy
-
-    apt update && apt install -y keepalived haproxy
-
-configure keepalived: On both nodes create the health check script /etc/keepalived/check_apiserver.sh
-
-    cat >> /etc/keepalived/check_apiserver.sh <<EOF
-    #!/bin/sh
-
-    errorExit() {
-    echo "*** $@" 1>&2
-    exit 1
-    }
-
-    curl --silent --max-time 2 --insecure https://localhost:6443/ -o /dev/null || errorExit "Error GET https://localhost:6443/"
-    if ip addr | grep -q 192.168.1.220; then
-    curl --silent --max-time 2 --insecure https://192.168.1.220:6443/ -o /dev/null || errorExit "Error GET https://192.168.1.220:6443/"
-    fi
+    cat >> /etc/hosts <<EOF
+    172.22.196.114 my.kuber.domain
     EOF
 
-    chmod +x /etc/keepalived/check_apiserver.sh
-
-Create keepalived config /etc/keepalived/keepalived.conf
-
-    cat >> /etc/keepalived/keepalived.conf <<EOF
-    vrrp_script check_apiserver {
-    script "/etc/keepalived/check_apiserver.sh"
-    interval 3
-    timeout 10
-    fall 5
-    rise 2
-    weight -2
-    }
-
-    vrrp_instance VI_1 {
-        state BACKUP
-        interface eth0
-        virtual_router_id 1
-        priority 100
-        advert_int 5
-        authentication {
-            auth_type PASS
-            auth_pass mysecret
-        }
-        virtual_ipaddress {
-            192.168.1.220
-        }
-        track_script {
-            check_apiserver
-        }
-    }
-    EOF
-
-Enable & start keepalived service
-
-    systemctl enable --now keepalived
-
-Configure haproxy
-
-Update /etc/haproxy/haproxy.cfg
-
-    cat >> /etc/haproxy/haproxy.cfg <<EOF
-
-    frontend kubernetes-frontend
-    bind *:8383
-    mode tcp
-    option tcplog
-    default_backend kubernetes-backend
-
-    backend kubernetes-backend
-    option httpchk GET /healthz
-    http-check expect status 200
-    mode tcp
-    option ssl-hello-chk
-    balance roundrobin
-        server kmaster1 192.168.1.201:6443 check fall 3 rise 2
-        server kmaster2 192.168.1.202:6443 check fall 3 rise 2
-
-    EOF
-
-Enable & restart haproxy service
-
-    systemctl enable haproxy && systemctl restart haproxy
-
-
-# ------------KUBERNETES------------
-
-# USER CREATING 
-
-1. Certificate signing
-
-Generate private rsa key file:
-
-    openssl genrsa -out user1.key 2048
-
-Create request:
-
-    openssl req -new -key user1.key -subj "/CN=user1" -out user1.csr 
-
-Make base64 request:
-
-    cat user1.csr | base64 | tr -d "\n"
-
-Past pequest key to user1-csr.yaml
-
-Apply request file:
-
-    kubectl apply -f user1-csr.yaml
-
-Approve csr:
-
-    kubectl certificate approve user1
-
-Get certificate:
-
-    kubectl get csr user1 -o yaml
-
-Decode certificate and save in file:
-
-    ecco 'actual certificate from file user1 -o yaml' | base64 --decode > user1.crt
-
-Connect to cluster using generated files:
-
-    kubectl --server=http://192.168.1.111:6443 \
-    --certificate-authority=/etc/kubernetes/pki/ca.crt \
-    --client-certificate=user1.crt \
-    --client-key=user1.key \
-
-
-
-
-
-
-
-ssh -L 8383:192.168.1.220:8383 -i newkey root@172.22.130.145
-
-cd PROXBOX
-export KUBECONFIG=$KUBECONFIG:kubeconfig 
-alias kubectl='kubectl --insecure-skip-tls-verify'
-kubectl cluster-info
-
-insecure-skip-tls-verify: true
+use kubectl or lens
