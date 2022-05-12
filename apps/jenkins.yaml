@@ -19,16 +19,14 @@ spec:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
-  # local:
-  #   path: /home/jenkins
-  # nodeAffinity:
-  #   required:
-  #     nodeSelectorTerms:
-  #     - matchExpressions:
-  #       - key: kubernetes.io/hostname
-  #         operator: In
-  #         values:
-  #         - worker-node01
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - worker-node01
   hostPath:
     path: "/home/jenkins"
 ---
@@ -74,7 +72,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: jenkins-admin
-  namespace: tools # change this namespace!!!!!!!!!!!!
+  namespace: apps # change this namespace!!!!!!!!!!!!
 
 ---
 apiVersion: apps/v1

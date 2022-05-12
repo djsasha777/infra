@@ -34,7 +34,7 @@ defaults
 	errorfile 504 /etc/haproxy/errors/504.http
 
 frontend kubernetes-frontend
-    bind {{ vip }}:{{ bind_port }}
+    bind *:{{ bind_port }}
     mode tcp
     option tcplog
     default_backend kubernetes-backend
