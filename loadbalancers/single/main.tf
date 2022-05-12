@@ -17,7 +17,7 @@ provider "proxmox" {
 
 resource "proxmox_vm_qemu" "loadbalancer" {
   count = 1
-  name = "lb-0${count.index + 1}"
+  name = "loadbalancer-0${count.index + 1}"
   target_node = "proxmox"
 
   clone = "template"
