@@ -235,7 +235,7 @@ spec:
       volumes:
         - name: 1c-server-home
           persistentVolumeClaim:
-            claimName: 1C-server-home
+            claimName: 1c-server-home
         - name: 1c-server-logs
           persistentVolumeClaim:
             claimName: 1c-server-logs
