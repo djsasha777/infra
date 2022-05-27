@@ -166,7 +166,7 @@ spec:
       volumes:
       - name: gitlab-persistent-storage
         persistentVolumeClaim:
-          claimName: gitlab-persistent-storage
+          claimName: gitlab-pvc
 
 ---
 apiVersion: v1
