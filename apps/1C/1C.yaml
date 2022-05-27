@@ -2,10 +2,10 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: 1C-server-home
+  name: 1c-server-home
   labels:
     type: local
-    app: 1C
+    app: 1c
 spec:
   storageClassName: local-storage
   capacity:
@@ -19,10 +19,10 @@ spec:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: 1C-server-logs
+  name: 1c-server-logs
   labels:
     type: local
-    app: 1C
+    app: 1c
 spec:
   storageClassName: local-storage
   capacity:
@@ -36,9 +36,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: 1C-server-home
+  name: 1c-server-home
   labels:
-    app: 1C
+    app: 1c
     type: local
 spec:
   storageClassName: local-storage
@@ -52,9 +52,9 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: 1C-server-logs
+  name: 1c-server-logs
   labels:
-    app: 1C
+    app: 1c
     type: local
 spec:
   storageClassName: local-storage
@@ -68,7 +68,7 @@ spec:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: 1C-postgres-pv
+  name: 1c-postgres-pv
   labels:
     app: postgres
     type: local
@@ -85,7 +85,7 @@ spec:
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: 1C-microk8s-hostpath
+  name: 1c-microk8s-hostpath
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
 provisioner: microk8s.io/hostpath
@@ -94,11 +94,11 @@ provisioner: microk8s.io/hostpath
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: 1C-postgres-pv-claim
+  name: 1c-postgres-pv-claim
   labels:
     app: postgres
 spec:
-  storageClassName: 1C-microk8s-hostpath
+  storageClassName: 1c-microk8s-hostpath
   capacity:
   accessModes:
     - ReadWriteOnce
@@ -166,28 +166,28 @@ spec:
       volumes:
       - name: pv-data
         persistentVolumeClaim:
-          claimName: 1C-postgres-pv-claim
+          claimName: 1c-postgres-pv-claim
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 1C-deployment
+  name: 1c-deployment
   labels:
-    name: 1C
-    app: 1C
+    name: 1c
+    app: 1c
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: 1C
+      app: 1c
   template:
     metadata:
       labels:
-        app: 1C
+        app: 1c
     spec:
       containers:
-      - name: 1C-server
+      - name: 1c-server
         image: djsasha777/1s-server:7
         command: [ "sleep" ]
         args: [ "infinity" ]
@@ -228,29 +228,29 @@ spec:
         - containerPort: 1590
         - containerPort: 1591
         volumeMounts:
-          - name: 1C-server-home
+          - name: 1c-server-home
             mountPath: /home/usr1cv8
-          - name: 1C-server-logs
+          - name: 1c-server-logs
             mountPath: /var/log/1C
       volumes:
-        - name: 1C-server-home
+        - name: 1c-server-home
           persistentVolumeClaim:
             claimName: 1C-server-home
-        - name: 1C-server-logs
+        - name: 1c-server-logs
           persistentVolumeClaim:
-            claimName: 1C-server-logs
+            claimName: 1c-server-logs
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: 1C-service
+  name: 1c-service
   labels:
-    name: 1C
-    app: 1C
+    name: 1c
+    app: 1c
 spec:
   selector:
-    app: 1C
+    app: 1c
   ports:
     - name: port1540
       protocol: TCP
@@ -397,22 +397,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 1C-web-deployment
+  name: 1c-web-deployment
   labels:
-    name: 1C-web
-    app: 1C-web
+    name: 1c-web
+    app: 1c-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: 1C-web
+      app: 1c-web
   template:
     metadata:
       labels:
-        app: 1C-web
+        app: 1c-web
     spec:
       containers:
-      - name: 1C-server
+      - name: 1c-server
         image: djsasha777/1s-web-server:2
         ports:
         - containerPort: 8082
@@ -421,14 +421,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: 1C-web-service
+  name: 1c-web-service
   labels:
-    name: 1C-web
-    app: 1C-web
+    name: 1c-web
+    app: 1c-web
 spec:
   type: LoadBalancer
   selector:
-    app: 1C-web
+    app: 1c-web
   ports:
     - name: port80
       protocol: TCP
