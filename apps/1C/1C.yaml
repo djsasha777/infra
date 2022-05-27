@@ -73,7 +73,7 @@ metadata:
     app: postgres
     type: local
 spec:
-  storageClassName: 1C-microk8s-hostpath
+  storageClassName: 1c-microk8s-hostpath
   capacity:
     storage: 1Gi
   accessModes:
