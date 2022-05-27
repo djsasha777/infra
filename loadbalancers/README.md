@@ -93,3 +93,22 @@ Update /etc/haproxy/haproxy.cfg
 Enable & restart haproxy service
 
     systemctl enable haproxy && systemctl restart haproxy
+
+
+
+
+
+UPDATE
+
+    cat >> /etc/haproxy/haproxy.cfg <<EOF
+    listen kubernetes-apiserver-https
+    bind 192.168.1.229:8383
+    mode tcp
+    option log-health-checks
+    timeout client 3h
+    timeout server 3h
+    server master1 192.168.1.201:6443 check check-ssl verify none inter 10000
+    server master2 192.168.1.202:6443 check check-ssl verify none inter 10000
+    balance roundrobin
+
+    EOF

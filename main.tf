@@ -20,20 +20,20 @@ resource "proxmox_vm_qemu" "node" {
   name = "node-0${count.index + 1}"
   target_node = "proxmox"
 
-  clone = "template"
+  clone = "ubuntu"
 
   agent = 1
   os_type = "cloud-init"
   cores = 2
   sockets = 1
   cpu = "host"
-  memory = 4096
+  memory = 3000
   scsihw = "virtio-scsi-pci"
   bootdisk = "scsi0"
 
   disk {
     slot = 0
-    size = "20G"
+    size = "21G"
     type = "scsi"
     storage = "drive"
     iothread = 1
