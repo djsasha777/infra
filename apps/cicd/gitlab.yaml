@@ -144,18 +144,18 @@ spec:
         - name: ssh
           containerPort: 22
 
-        livenessProbe:
-          httpGet:
-            path: /users/sign_in
-            port: 8085
-          initialDelaySeconds: 180
-          timeoutSeconds: 15
-        readinessProbe:
-          httpGet:
-            path: /users/sign_in
-            port: 8085
-          initialDelaySeconds: 15
-          timeoutSeconds: 1
+        # livenessProbe:
+        #   httpGet:
+        #     path: /users/sign_in
+        #     port: 8085
+        #   initialDelaySeconds: 180
+        #   timeoutSeconds: 15
+        # readinessProbe:
+        #   httpGet:
+        #     path: /users/sign_in
+        #     port: 8085
+        #   initialDelaySeconds: 15
+        #   timeoutSeconds: 1
         volumeMounts:
           - mountPath: /etc/gitlab
             name: gitlab-persistent-storage
