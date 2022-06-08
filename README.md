@@ -171,3 +171,29 @@ add zerotier address to hosts file
     EOF
 
 use kubectl or lens
+
+
+
+
+
+fix cloud-init
+
+/etc/cloud/cloud.cfg
+
+# The modules that run in the 'init' stage
+cloud_init_modules:
+ - migrator
+ - seed_random
+ - bootcmd
+ - write-files
+ - growpart
+ - resizefs
+ - disk_setup
+ - mounts
+ - set_hostname
+ - update_hostname
+ - ca-certs
+ - rsyslog
+ - users-groups
+ - ssh
+# - update_etc_hosts
