@@ -2,7 +2,7 @@ terraform {
   required_providers {
     proxmox = {
       source = "telmate/proxmox"
-      version = "2.7.4"
+      version = "2.9.10"
     }
   }
 }
@@ -16,27 +16,26 @@ provider "proxmox" {
 }
 
 resource "proxmox_vm_qemu" "node" {
-  count = 5
+  count = 4
   name = "node-0${count.index + 1}"
   target_node = "proxmox"
-
-  clone = "ubuntu"
+  
+  clone = "centos8"
 
   agent = 1
   os_type = "cloud-init"
   cores = 2
   sockets = 1
+  vcpus = 0
   cpu = "host"
-  memory = 3000
-  scsihw = "virtio-scsi-pci"
+  memory = 4096
+  scsihw = "lsi"
   bootdisk = "scsi0"
 
   disk {
-    slot = 0
-    size = "21G"
-    type = "scsi"
-    storage = "drive"
-    iothread = 1
+    size            = "20G"
+    type            = "scsi"
+    storage         = "drive"
   }
 
   network {
