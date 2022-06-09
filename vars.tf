@@ -7,5 +7,5 @@ variable "proxmox_host" {
 }
 
 variable "template_name" {
-    default = "centos8"
+    default = "centos"
 }

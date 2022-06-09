@@ -197,3 +197,8 @@ cloud_init_modules:
  - users-groups
  - ssh
 # - update_etc_hosts
+
+
+get argocd default pass
+
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d

@@ -20,7 +20,7 @@ resource "proxmox_vm_qemu" "node" {
   name = "node-0${count.index + 1}"
   target_node = "proxmox"
   
-  clone = "centos8"
+  clone = "centos"
 
   agent = 1
   os_type = "cloud-init"
@@ -33,7 +33,7 @@ resource "proxmox_vm_qemu" "node" {
   bootdisk = "scsi0"
 
   disk {
-    size            = "20G"
+    size            = "25G"
     type            = "scsi"
     storage         = "drive"
   }
