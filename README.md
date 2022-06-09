@@ -173,12 +173,11 @@ add zerotier address to hosts file
 use kubectl or lens
 
 
+fix for cloud-init
 
+virt-edit -a centos9.qcow2 /etc/cloud/cloud.cfg
 
-
-fix cloud-init
-
-/etc/cloud/cloud.cfg
+commit line "- update_etc_hosts" in file 
 
 # The modules that run in the 'init' stage
 cloud_init_modules:
@@ -196,7 +195,7 @@ cloud_init_modules:
  - rsyslog
  - users-groups
  - ssh
-# - update_etc_hosts
+ - update_etc_hosts  #this line!!!
 
 
 get argocd default pass
