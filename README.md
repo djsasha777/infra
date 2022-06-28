@@ -1,4 +1,4 @@
-# PROXBOX project - kubernetes on proxmox
+# Complete BAREMETAL kubernetes cluster on proxmox
 
 Prerequisite
 
