@@ -1,110 +1,106 @@
 # Complete BAREMETAL kubernetes cluster on proxmox
 
-Prerequisite
+Step by step installation
 
-Terraform and Ansible is required to run the provisioning and configuration tasks. You may install them on macOS using Homebrew.
+1. Download iso image of Proxmox https://www.proxmox.com/en/downloads/category/iso-images-pve
 
-    brew install terraform ansible python3
+2. Create bootable usb drive with balena eatcher 
 
-Alternatively you may prepare your Ansible environment using `virtualenv`.
+3. Insert bootable usb drive into server PC, select boot from usb in bios
 
-    pip3 install virtualenv
+4. Install Proxmox on system
 
-# Create new python virtual environment in .ansible directory
-    
-    virtualenv .ansible
+5. Add user, create token
 
-# Activate the virtual environment according to your shell (e.g. fish)
-. .ansible/bin/activate.fish
-```
+6. Add Cloud-init Template
 
-## Terraform Secrets
+Install tools to working mashine
 
-The passwords and SSH keys used by Terraform are retrieved from the `terraform/.terraform_secret.yaml` file. You may generate new passwords and SSH keys with the following commands.
+    apt-get install libguestfs-tools
 
-```bash
-# Create a random password with length 24
-openssl rand -base64 24
+Download the ubuntu cloud image
 
-# Create a RSA ssh key in PEM format with comment and file path
-ssh-keygen -t rsa -b 4096 -N "" -C "$USERNAME@$DOMAIN" -m pem -f "$PRIVATE_KEY"
-```
+    wget https://cloud.centos.org/centos/9-stream/x86_64/images/CentOS-Stream-GenericCloud-9-20220627.1.x86_64.qcow2
 
-For the full list of required passwords and SSH keys, you may refer to the below sample configuration.
+Edit cloud.cfg
 
-```yaml
-# Proxmox API host URL
-pm_api_url: https://<api_host>:8006/api2/json
-# Proxmox user (e.g. root@pam)
-pm_user: <api_user>
-# Proxmox password
-pm_password: <api_password>
-# Root password
-root_password: <root_password>
-# Cloud-init user (i.e. terraform) password
-user_password: <user_password>
-# Key used by Terraform and Ansible to login to bastion host to execute tasks
-ssh_key: |
-  -----BEGIN RSA PRIVATE KEY-----
-  -----END RSA PRIVATE KEY-----
-# Key used by the default Terraform sudo user among all provisioned hosts
-terraform_key: |
-  -----BEGIN RSA PRIVATE KEY-----
-  -----END RSA PRIVATE KEY-----
-```
+    virt-edit -a CentOS-Stream-GenericCloud-9-20220627.1.x86_64.qcow2 /etc/cloud/cloud.cfg
 
-Make sure the bastion host has the terraform user and `terraform_key` authorized with `ssh_key`. Otherwise, use the first gateway host as the bastion host and configure the public IP in your DNS service provider. You also need to ensure the `ssh_key` is your default key in `~/.ssh/id_rsa` or specify the location in the SSH command of `ansible/group_vars/*.yml`.
+edit the disable_root: 1 to disable_root: 0
 
-## Container Template
+toggle the “lock_passwd” from “true” to “false”
 
-LXC [containers](https://pve.proxmox.com/wiki/Linux_Container) are used to create the DNS and load balancers. You may update available containers and download the required template with the cluster shell in the console as follows.
+commit line "- update_etc_hosts" 
 
-```bash
-# Update the container template database
-pveam update
+cloud_init_modules:
+ - migrator
+ - seed_random
+ - bootcmd
+ - write-files
+ - growpart
+ - resizefs
+ - disk_setup
+ - mounts
+ - set_hostname
+ - update_hostname
+ - ca-certs
+ - rsyslog
+ - users-groups
+ - ssh
+ #- update_etc_hosts  
 
-# Download the ubuntu container template
-pveam download local ubuntu-20.04-standard_20.04-1_amd64.tar.gz
-```
+add apps to cloud-init image 
 
-## Cloud-init Template
+packages:
+ - qemu-guest-agent
+ - nano
+ - wget
+ - curl
+ - net-tools
 
-Virtual machines provisioned are initialized using [Cloud-init](https://pve.proxmox.com/wiki/Cloud-Init_Support). You need to create a cloud-init image and convert it to a VM template in order to further clone in the Terraform Proxmox [provider](https://github.com/Telmate/terraform-provider-proxmox) into VMs, resizing the disk, and configuring the default user, passwords, SSH keys and network. To prepare the template, you may use the following commands.
+Save changes of /etc/cloud/cloud.cfg and exit
 
-```bash
-# Download the ubuntu cloud image
-wget http://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64.img
+Edit /etc/ssh/sshd_config
 
-# Create a new VM with ID 9000
-qm create 9000 --memory 2048 --net0 virtio,bridge=vmbr0
+ virt-edit -a CentOS-Stream-GenericCloud-9-20220627.1.x86_64.qcow2 /etc/ssh/sshd_config
 
-# Import the downloaded disk to local storage with qcow2 format
-qm importdisk 9000 focal-server-cloudimg-amd64.img local --format qcow2
+set PermitRootLogin yes 
 
-# Attach the new disk to the VM as scsi drive
-qm set 9000 --scsihw virtio-scsi-pci --scsi0 local:9000/vm-9000-disk-0.qcow2
+save and exit
 
-# Add Cloud-Init CDROM drive
-qm set 9000 --ide2 local:cloudinit
+copy modifier cloud image to proxmox
 
-# Speed up booting by setting the bootdisk parameter
-qm set 9000 --boot c --bootdisk scsi0
+    scp modified-image.qcow2 proxmoxuser@192.168.1.111:/tmp
 
-# Configure a serial console for display
-qm set 9000 --serial0 socket --vga serial0
+Create a new VM with ID 9000
 
-# Convert the VM into a template
-qm template 9000
-```
+    qm create 9000 --memory 2048 --net0 virtio,bridge=vmbr0
 
-## Get Started
+Import the downloaded disk to local storage with qcow2 format
 
+    qm importdisk 9000 CentOS-Stream-GenericCloud-9-20220627.1.x86_64.qcow2 local --format qcow2
 
-# Set the one-time password for Proxmox API authentication
+Attach the new disk to the VM as scsi drive
 
-    export PM_OTP=xxxxx
+    qm set 9000 --scsihw virtio-scsi-pci --scsi0 local:9000/vm-9000-disk-0.qcow2
 
-# ADD virtual maschines using terraform
+Add Cloud-Init CDROM drive
+
+    qm set 9000 --ide2 local:cloudinit
+
+Speed up booting by setting the bootdisk parameter
+
+    qm set 9000 --boot c --bootdisk scsi0
+
+Configure a serial console for display
+
+    qm set 9000 --serial0 socket --vga serial0
+
+Convert the VM into a template
+
+    qm template 9000
+
+7. ADD virtual maschines using terraform
 
     terraform init
 
@@ -112,7 +108,7 @@ qm template 9000
 
     terraform apply
 
-# Install load balancer with ansible scripts
+8. Install load balancer with ansible scripts
 
     cd loadbalancers/ha
 
@@ -128,7 +124,7 @@ install and configure haproxy and keepalived
 
     ansible-playbook ha-keep-main
 
-# Install k8s using kubespray
+9. Install k8s using kubespray
 
 Clone kubespray git
 
@@ -158,7 +154,7 @@ Deploy Kubespray with Ansible Playbook - run the playbook as root The option --b
     ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml
 
 
-# connect to kubernetes with kubeconfig
+10. connect to kubernetes with kubeconfig
 
 copy kubernetes config
 
@@ -170,34 +166,3 @@ add zerotier address to hosts file
     172.22.196.114 my.kuber.domain
     EOF
 
-use kubectl or lens
-
-
-fix for cloud-init
-
-virt-edit -a centos9.qcow2 /etc/cloud/cloud.cfg
-
-commit line "- update_etc_hosts" in file 
-
-# The modules that run in the 'init' stage
-cloud_init_modules:
- - migrator
- - seed_random
- - bootcmd
- - write-files
- - growpart
- - resizefs
- - disk_setup
- - mounts
- - set_hostname
- - update_hostname
- - ca-certs
- - rsyslog
- - users-groups
- - ssh
- - update_etc_hosts  #this line!!!
-
-
-get argocd default pass
-
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
