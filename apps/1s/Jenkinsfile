@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    stages {
+        stage('start') {
+            steps {
+              echo 'Salut monsieur !'
+              echo 'This is build and push pipeline of is-server image'
+              sh 'docker ps'
+
+            }
+        }
+        stage('build') {
+            steps {
+              echo 'build docker image of 1s-server'
+              sh 'docker build -t 1s-server .'
+            }
+        }
+        stage('push'){
+            steps {
+                echo 'pushing to docker hub'
+                withCredentials([usernamePassword(credentialsId: 'dockerhubcred', usernameVariable: 'DOCKERHUB_LOGIN', passwordVariable: 'DOCKERHUB_PASS')]) {
+                        sh '''
+                            echo $DOCKERHUB_PASS | docker login --username $DOCKERHUB_LOGIN --password-stdin
+                            docker image tag 1s-server $DOCKERHUB_LOGIN/1s-server:7
+                            docker image push $DOCKERHUB_LOGIN/1s-server:7
+                        '''
+                        }
+            }
+        }
+
+    }
+}

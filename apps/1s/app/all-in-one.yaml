@@ -1,104 +1,124 @@
----
-kind: PersistentVolume
 apiVersion: v1
+kind: Namespace
 metadata:
-  name: 1c-server-home
-  labels:
-    type: local
-    app: 1c
-spec:
-  storageClassName: local-storage
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/home/1C/server-home"
+  name: 1s
 
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: 1c-server-logs
-  labels:
-    type: local
-    app: 1c
-spec:
-  storageClassName: local-storage
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/home/1C/server-logs"
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: 1c-server-home
-  labels:
-    app: 1c
-    type: local
-spec:
-  storageClassName: local-storage
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: 1c-server-logs
-  labels:
-    app: 1c
-    type: local
-spec:
-  storageClassName: local-storage
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: 1c-postgres-pv
-  labels:
-    app: postgres
-    type: local
-spec:
-  storageClassName: 1c-microk8s-hostpath
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/home/1C/var/data"
+# ---
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: local-storage
+# provisioner: kubernetes.io/no-provisioner
+# volumeBindingMode: WaitForFirstConsumer
 
 ---
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: 1c-microk8s-hostpath
+  name: 1s-microk8s-hostpath
+  namespace: 1s
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
 provisioner: microk8s.io/hostpath
 
 ---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: 1s-server-home
+  namespace: 1s
+  labels:
+    type: local
+    app: 1s
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/1s/server-home"
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: 1s-server-logs
+  namespace: 1s
+  labels:
+    type: local
+    app: 1s
+spec:
+  storageClassName: local-storage
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/1s/server-logs"
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: 1s-server-home
+  namespace: 1s
+  labels:
+    app: 1s
+    type: local
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: 1s-server-logs
+  namespace: 1s
+  labels:
+    app: 1s
+    type: local
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: 1s-postgres-pv
+  namespace: 1s
+  labels:
+    app: postgres
+    type: local
+spec:
+  storageClassName: 1s-microk8s-hostpath
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/home/1s/var/data"
+
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: 1c-postgres-pv-claim
+  name: 1s-postgres-pv-claim
+  namespace: 1s
   labels:
     app: postgres
 spec:
-  storageClassName: 1c-microk8s-hostpath
+  storageClassName: 1s-microk8s-hostpath
   capacity:
   accessModes:
     - ReadWriteOnce
@@ -111,6 +131,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgres-configuration
+  namespace: 1s
   labels:
     app: postgres
 data:
@@ -123,6 +144,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-service
+  namespace: 1s
   labels:
     app: postgres
 spec:
@@ -138,6 +160,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres-statefulset
+  namespace: 1s
   labels:
     app: postgres
 spec:
@@ -166,28 +189,29 @@ spec:
       volumes:
       - name: pv-data
         persistentVolumeClaim:
-          claimName: 1c-postgres-pv-claim
+          claimName: 1s-postgres-pv-claim
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 1c-deployment
+  name: s-deployment
+  namespace: 1s
   labels:
-    name: 1c
-    app: 1c
+    name: 1s
+    app: 1s
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: 1c
+      app: 1s
   template:
     metadata:
       labels:
-        app: 1c
+        app: 1s
     spec:
       containers:
-      - name: 1c-server
+      - name: s-server
         image: djsasha777/1s-server:7
         command: [ "sleep" ]
         args: [ "infinity" ]
@@ -228,29 +252,30 @@ spec:
         - containerPort: 1590
         - containerPort: 1591
         volumeMounts:
-          - name: 1c-server-home
+          - name: 1s-server-home
             mountPath: /home/usr1cv8
-          - name: 1c-server-logs
+          - name: 1s-server-logs
             mountPath: /var/log/1C
       volumes:
-        - name: 1c-server-home
+        - name: 1s-server-home
           persistentVolumeClaim:
-            claimName: 1c-server-home
-        - name: 1c-server-logs
+            claimName: 1s-server-home
+        - name: 1s-server-logs
           persistentVolumeClaim:
-            claimName: 1c-server-logs
+            claimName: 1s-server-logs
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: 1c-service
+  name: s-service
+  namespace: 1s
   labels:
-    name: 1c
-    app: 1c
+    name: 1s
+    app: 1s
 spec:
   selector:
-    app: 1c
+    app: 1s
   ports:
     - name: port1540
       protocol: TCP
@@ -397,42 +422,45 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 1c-web-deployment
+  name: s-web-deployment
+  namespace: 1s
   labels:
-    name: 1c-web
-    app: 1c-web
+    name: 1s-web
+    app: 1s-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: 1c-web
+      app: 1s-web
   template:
     metadata:
       labels:
-        app: 1c-web
+        app: 1s-web
     spec:
       containers:
-      - name: 1c-server
+      - name: s-server
         image: djsasha777/1s-web-server:2
         ports:
-        - containerPort: 8082
+        - containerPort: 80
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: 1c-web-service
+  name: s-web-service
+  namespace: 1s
   labels:
-    name: 1c-web
-    app: 1c-web
+    name: 1s-web
+    app: 1s-web
 spec:
   type: LoadBalancer
   selector:
-    app: 1c-web
+    app: 1s-web
   ports:
     - name: port80
       protocol: TCP
-      port: 8082
-      targetPort: 8082
+      port: 80
+      targetPort: 80
       nodePort: 30580
+
 

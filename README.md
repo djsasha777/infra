@@ -166,3 +166,18 @@ add zerotier address to hosts file
     172.22.196.114 my.kuber.domain
     EOF
 
+
+
+
+kubectl config set-cluster mykuber --certificate-authority=ca.pem --embed-certs=true --server=https://77.223.98.80:8383/ --kubeconfig=mycloud.kubeconfig
+
+kubectl config set-credentials admin
+--client-certificate=admin.pem
+--client-key=admin-key.pem
+--embed-certs=true
+--kubeconfig=mycloud.kubeconfig
+
+kubectl config set-context default
+--cluster=kubernetes-the-hard-way
+--user=admin
+--kubeconfig=mycloud.kubeconfig
