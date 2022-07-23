@@ -65,7 +65,7 @@ spec:
               cpu: "1"
               memory: "1500"
             limits:
-              cpu: "1"
+              cpu: "2"
               memory: "1700"
           ports:
             - containerPort: 8061
@@ -76,6 +76,7 @@ spec:
         - name: nexus-data
           persistentVolumeClaim:
             claimName: my-nexus-pvc
+            
 ---
 apiVersion: v1
 kind: Service
