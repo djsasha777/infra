@@ -83,7 +83,11 @@ spec:
           timeoutSeconds: 5
         resources:
           requests:
-            cpu: "0.1"
+            cpu: "1"
+            memory: "799M"
+          limits:
+            cpu: "2"
+            memory: "1000M"
 
 ---
 apiVersion: v1
@@ -126,6 +130,13 @@ spec:
       containers:
         - name: kamailio
           image: cycoresystems/kamailio
+          resources:
+            requests:
+              cpu: "1"
+              memory: "799M"
+            limits:
+              cpu: "1"
+              memory: "1000M"
           env:
             - name: CLOUD
               value: gcp
@@ -134,11 +145,25 @@ spec:
               mountPath: /data/kamailio
         - name: rtpproxy
           image: cycoresystems/rtpproxy
+          resources:
+            requests:
+              cpu: "1"
+              memory: "799M"
+            limits:
+              cpu: "1"
+              memory: "1000M"
           env:
             - name: CLOUD
               value: gcp
         - name: dispatchers
           image: cycoresystems/dispatchers
+          resources:
+            requests:
+              cpu: "1"
+              memory: "799M"
+            limits:
+              cpu: "1"
+              memory: "1000M"
           command:
             - /app
             - "-set"
@@ -188,11 +213,25 @@ spec:
       containers:
         - name: asterisk
           image: cycoresystems/asterisk:16.6.1
-          volumeMounts:
-            - name: config
-              mountPath: /etc/asterisk
+          resources:
+            requests:
+              cpu: "1"
+              memory: "799M"
+            limits:
+              cpu: "1"
+              memory: "1000M"
+            volumeMounts:
+              - name: config
+                mountPath: /etc/asterisk
         - name: config
           image: cycoresystems/asterisk-config:v0.9.1
+          resources:
+            requests:
+              cpu: "1"
+              memory: "799M"
+            limits:
+              cpu: "1"
+              memory: "1000M"
           volumeMounts:
             - name: config
               mountPath: /etc/asterisk
@@ -209,6 +248,13 @@ spec:
               value: admin
         - name: natsgw
           image: cycoresystems/ari-proxy:v5.0.1
+          resources:
+            requests:
+              cpu: "1"
+              memory: "799M"
+            limits:
+              cpu: "1"
+              memory: "1000M"
           env:
             - name: NATS_URI
               value: nats://nats:4222

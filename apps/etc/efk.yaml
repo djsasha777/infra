@@ -19,10 +19,12 @@ spec:
       - name: elasticsearch
         image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
         resources:
-            limits:
-              cpu: 1000m
-            requests:
-              cpu: 100m
+          requests:
+            cpu: "1"
+            memory: "799M"
+          limits:
+            cpu: "1"
+            memory: "1000M"
         ports:
         - containerPort: 9200
           name: rest
@@ -118,6 +120,13 @@ spec:
       containers:
       - name: fluentd
         image: fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1
+        resources:
+          requests:
+            cpu: "1"
+            memory: "799M"
+          limits:
+            cpu: "1"
+            memory: "1000M"
         env:
           - name:  FLUENT_ELASTICSEARCH_HOST
             value: "elasticsearch.default.svc.cluster.local"
@@ -127,12 +136,6 @@ spec:
             value: "http"
           - name: FLUENTD_SYSTEMD_CONF
             value: disable
-        resources:
-          limits:
-            memory: 512Mi
-          requests:
-            cpu: 100m
-            memory: 200Mi
         volumeMounts:
         - name: varlog
           mountPath: /var/log
@@ -212,10 +215,12 @@ spec:
       - name: kibana
         image: docker.elastic.co/kibana/kibana:lts
         resources:
-          limits:
-            cpu: 1000m
           requests:
-            cpu: 100m
+            cpu: "1"
+            memory: "799M"
+          limits:
+            cpu: "1"
+            memory: "1000M"
         env:
           - name: ELASTICSEARCH_URL
             value: http://elasticsearch:9200

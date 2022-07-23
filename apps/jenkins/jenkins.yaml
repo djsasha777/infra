@@ -72,7 +72,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: jenkins-admin
-  namespace: apps # change this namespace!!!!!!!!!!!!
+  # namespace: apps # change this namespace!!!!!!!!!!!!
 
 ---
 apiVersion: apps/v1

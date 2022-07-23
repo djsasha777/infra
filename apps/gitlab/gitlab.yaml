@@ -1,3 +1,11 @@
+# ---
+# kind: StorageClass
+# apiVersion: storage.k8s.io/v1
+# metadata:
+#   name: local-storage
+# provisioner: kubernetes.io/no-provisioner
+# volumeBindingMode: WaitForFirstConsumer
+
 ---
 kind: PersistentVolume
 apiVersion: v1
@@ -6,7 +14,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: my-local-storage
+  storageClassName: local-storage
   capacity:
     storage: 1Gi
   accessModes:
@@ -22,7 +30,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: my-local-storage
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   resources:
@@ -49,6 +57,13 @@ spec:
       containers:
       - name: gitlab
         image: gitlab/gitlab-ce:10.4.3-ce.0
+        resources:
+          requests:
+            cpu: "1"
+            memory: "799M"
+          limits:
+            cpu: "2"
+            memory: "1000M"
         imagePullPolicy: Always
         env:
         - name: TZ
@@ -144,18 +159,18 @@ spec:
         - name: ssh
           containerPort: 22
 
-        # livenessProbe:
-        #   httpGet:
-        #     path: /users/sign_in
-        #     port: 8085
-        #   initialDelaySeconds: 180
-        #   timeoutSeconds: 15
-        # readinessProbe:
-        #   httpGet:
-        #     path: /users/sign_in
-        #     port: 8085
-        #   initialDelaySeconds: 15
-        #   timeoutSeconds: 1
+        livenessProbe:
+          httpGet:
+            path: /users/sign_in
+            port: 8085
+          initialDelaySeconds: 180
+          timeoutSeconds: 15
+        readinessProbe:
+          httpGet:
+            path: /users/sign_in
+            port: 8085
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
         volumeMounts:
           - mountPath: /etc/gitlab
             name: gitlab-persistent-storage

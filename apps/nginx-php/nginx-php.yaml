@@ -1,9 +1,10 @@
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: my-local-storage
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
+# ---
+# kind: StorageClass
+# apiVersion: storage.k8s.io/v1
+# metadata:
+#   name: local-storage
+# provisioner: kubernetes.io/no-provisioner
+# volumeBindingMode: WaitForFirstConsumer
 
 ---
 kind: PersistentVolume
@@ -13,7 +14,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: my-local-storage
+  storageClassName: local-storage
   capacity:
     storage: 1Gi
   accessModes:
@@ -29,7 +30,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: my-local-storage
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   resources:
