@@ -63,10 +63,10 @@ spec:
           resources:
             requests:
               cpu: "1"
-              memory: "799M"
+              memory: "1024"
             limits:
-              cpu: "2"
-              memory: "800M"
+              cpu: "1"
+              memory: "1100"
           ports:
             - containerPort: 8081
           volumeMounts:
