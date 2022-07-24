@@ -1,1 +1,0 @@
-# Mini kubernetes cluster setup
