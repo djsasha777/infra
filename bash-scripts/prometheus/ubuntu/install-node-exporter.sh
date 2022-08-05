@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # Make node_exporter user
 sudo adduser --no-create-home --disabled-login --shell /bin/false --gecos "Node Exporter User" node_exporter
 
