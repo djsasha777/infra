@@ -15,7 +15,7 @@ sudo chown prometheus:prometheus /var/lib/prometheus
 
 #obrain architecture
 ARCHT=$(uname -m)
-if [[ "$ARCHT" == 'aarch' ]]; then
+if [[ "$ARCHT" == 'aarch64' ]]; then
 ARC=arm64
 elif [[ "$ARCHT" == 'x86_64' ]]; then
 ARC=amd64
