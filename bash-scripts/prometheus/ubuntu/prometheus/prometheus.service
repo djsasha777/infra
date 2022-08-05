@@ -1,6 +1,7 @@
 [Unit]
-Description=Prometheus Service
-After=network.target
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 User=prometheus
@@ -11,8 +12,6 @@ ExecStart=/usr/local/bin/prometheus \
 --storage.tsdb.path /var/lib/prometheus/ \
 --web.console.templates=/etc/prometheus/consoles \
 --web.console.libraries=/etc/prometheus/console_libraries
-ExecReload=/bin/kill -HUP $MAINPID
-Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
