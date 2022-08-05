@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # Make prometheus user
 sudo adduser --no-create-home --disabled-login --shell /bin/false --gecos "Prometheus Monitoring User" prometheus
 
