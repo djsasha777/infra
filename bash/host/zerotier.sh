@@ -4,4 +4,5 @@ echo "please enter zerotier netwirk id"
 NETID=$(read)
 curl -s https://install.zerotier.com | sudo bash
 zerotier-cli join ${NETID}
-echo "zerotier installed and connected!"
+echo "zerotier installed!"
+echo "Please, allow your host in your zerotiers settings"
