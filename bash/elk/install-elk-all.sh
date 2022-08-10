@@ -93,3 +93,7 @@ elif [ "$(grep -Ei 'fedora|redhat|centos' /etc/*release)" ]
 else
     echo "This script doesn't support ELK installation on this OS."
 fi
+
+#logstash configure
+copy logstash-configs/* /etc/logstash/conf.d/
+systemctl restart logstash

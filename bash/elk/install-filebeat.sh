@@ -1,5 +1,4 @@
 #!/bin/bash
-#install grafana
 VERS=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
 if [[ "$VERS" == 'ubuntu' ]]; then
 echo "your distributive is ${VERS}"
