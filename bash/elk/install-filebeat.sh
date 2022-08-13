@@ -7,7 +7,6 @@ sudo apt-get install -y filebeat
 elif [[ "$VERS" == 'centos' ]]; then
 echo "your distributive is ${VERS}"
 yum install filebeat
-EOF
 else
   echo "DISTRIBUTIVE NOT SUPPORT!"
 fi
