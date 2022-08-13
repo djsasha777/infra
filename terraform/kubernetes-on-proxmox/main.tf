@@ -16,7 +16,7 @@ provider "proxmox" {
 }
 
 resource "proxmox_vm_qemu" "node" {
-  count = 4
+  count = 5
   name = "node-0${count.index + 1}"
   target_node = "proxmox"
   
@@ -28,12 +28,12 @@ resource "proxmox_vm_qemu" "node" {
   sockets = 1
   vcpus = 0
   cpu = "host"
-  memory = 4096
+  memory = 6144
   scsihw = "lsi"
   bootdisk = "scsi0"
 
   disk {
-    size            = "25G"
+    size            = "60G"
     type            = "scsi"
     storage         = "drive"
   }
