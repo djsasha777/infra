@@ -1,5 +1,5 @@
 variable "ssh_key" {
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDKEeKirN+yZJTFOA0g1Rp1/SbsCQ49Se/cA/ta9bNLClDL8dvK6fydQSTFlhYVBOWd2XtrEobaSoC6CuYsBV2LN42yXsmZ6IUCBE9h/05VPsdLHOn8zOyovbXOeABK6C285lBJyf72ciJliD8WEavNTfbCxnbcHclJEwgVqJTemCbPSWrk10r5TgvfBAL9gA0K425fHmLrhG3S123XRPH4YsDNXSxm+V0fCREQXkMRgXYB+N+eTF2JtoYS7FOldTeoJNqHXYOwycXkemrsdRhTGjJC2vsTzTWQl+Ma9Y/ALMXc0FKmWIa1ABmp5vPZn4QoVL4JRfuH19VdZmXtWwuDZawRPyP7cABOT4hMtjR18LeqwfOoUB6mLIXf0hCoW5xqqsEo18Wk/tj8ha3pC6eIt/SOWsIT+2VCGYSCrj0kU5qMRIXRg90OqnjcrCZ3aGhj7qHH3+xyy9hZGJMDGmhWdH6bF93oxQeWqhtjgn79zpavA0gF3IrbPi1e+UeE1cU= root@lb"
+  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCkMEmsJnch4ck17cP5TM9pDpjBw4sz24bxwAVqBMl8OHCSwgS1FaPWVI4xdRv5BUEZqAeCgL8pEucarxC11lYCncv/Mh9lqjuRICVF17i0bvAmHongORGUDUNLEd6QCxdQhm0REvDlbRAtQd89rOMn0HVLRhRLv8ZjkYBrN/OLef56S+x7+n2NI27q+YMtCZQgsIT0dLcsov7ZgHWuSU5U11PiV+d+Y8NboSHEjlMRvMnlxcyyn+9o/z0g1NWpbAeq1OVvR7yE0Q8lGGokkdeUQe5wkn2X2tw9ql7BupGgQTNu/MYMyugGymKJLLZDmBLtu+9423l6q+aURNExO5VUqf93GlJP/FXyDHJdC6mEYiPdu6ZN0G6fKLiOHDaxJi7dfZiyFs5k52iut7O/s1XPvXOjGFAPIZbHrZrseMUnJwYVqfj9vj52MJXFHG6LhZScnp/vlX8FZ567dDPNAhCHpbjVVfBAcywh5tcKqvsIQWumIzB0qk9N6mR7GJXkht8= root@main"
 }
 
 variable "proxmox_host" {
@@ -7,5 +7,5 @@ variable "proxmox_host" {
 }
 
 variable "template_name" {
-    default = "centos"
+    default = "ubuntu20"
 }
