@@ -17,14 +17,14 @@ provider "proxmox" {
 
 resource "proxmox_vm_qemu" "node" {
   timeouts {
-    create = "20m"
-    delete = "5m"
+    create = "30m"
+    delete = "40m"
   }
   count = 4
-  name = "kube-${count.index + 1}"
+  name = "ce-kub-${count.index + 1}"
   target_node = "proxmox"
   
-  clone = "ubuntu20"
+  clone = "ub20-templ"
 
   agent = 1
   os_type = "cloud-init"
@@ -32,12 +32,12 @@ resource "proxmox_vm_qemu" "node" {
   sockets = 1
   vcpus = 0
   cpu = "host"
-  memory = 6144
+  memory = 4096
   scsihw = "lsi"
   bootdisk = "scsi0"
 
   disk {
-    size            = "64G"
+    size            = "15G"
     type            = "scsi"
     storage         = "drive"
   }
@@ -54,7 +54,7 @@ resource "proxmox_vm_qemu" "node" {
     ]
   }
 
-  ipconfig0 = "ip=192.168.1.20${count.index + 1}/24,gw=192.168.1.1"
+  ipconfig0 = "ip=192.168.1.11${count.index + 1}/24,gw=192.168.1.1"
   sshkeys = <<EOF
   ${var.ssh_key}
   EOF

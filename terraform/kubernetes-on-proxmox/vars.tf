@@ -7,5 +7,5 @@ variable "proxmox_host" {
 }
 
 variable "template_name" {
-    default = "ubuntu20"
+    default = "ce9-templ"
 }
