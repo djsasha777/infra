@@ -1,5 +1,5 @@
 ---
-- hosts: "loadbalancer"
+- hosts: "nodes"
   remote_user: root
   gather_facts: yes
   connection: ssh
