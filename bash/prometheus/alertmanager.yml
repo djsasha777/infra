@@ -1,22 +1,16 @@
 global:
-  smtp_smarthost: 'smtp.qq.com:587'
-  smtp_from: 'xxx@qq.com'
-  smtp_auth_username: 'xxx@qq.com'
-  smtp_auth_password: 'password' #Пароль не пароль почтового ящика, а код авторизации почтового ящика
-  resolve_timeout: 5m
 route:
   group_by: ['alertname']
-  group_wait: 10s
-  group_interval: 10s
-  repeat_interval: 1h
-  receiver: 'web.hook'
+  group_wait: 30s
+  group_interval: 10m
+  repeat_interval: 60m
+  receiver: 'email'
 receivers:
-  - name: 'web.hook'
-    email_configs:
-    - to: 'example@qq.com' #Почтовый ящик для получения электронного письма с предупреждением
-inhibit_rules:
-  - source_match:
-      severity: 'critical'
-    target_match:
-      severity: 'warning'
-    equal: ['alertname', 'dev', 'instance']
+- name: 'email'
+  email_configs:
+  - to: 'djsasha777@mail.ru'
+    from: 'djsasha777@mail.ru'
+    smarthost: 'smtp.mail.ru:465'
+    auth_username: 'djsasha777'
+    auth_identity: 'djsasha777'
+    auth_password: '1234'
