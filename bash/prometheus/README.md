@@ -12,25 +12,9 @@
 
     chmod +x install-prometheus-all.sh
 
-3. Config prometheus.yml file, change remote monitoring hosts in section "scrape_configs:" eg:
+3. Config prometheus.yml file, change remote monitoring hosts in section "scrape_configs:"
 
-    - job_name: "nasos"
-        scrape_interval: 5s
-        static_configs:
-        - targets: ["3.84.62.193:8444"]
-
-4. Add allerting rules to file prometheus.rules.yaml, eg:
-
-    - name: my_alert1
-        rules:          
-        - alert: HostOutOfMemory
-            expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
-            for: 2m
-            labels:
-            severity: warning
-            annotations:
-            summary: Host out of memory (instance {{ $labels.instance }})
-            description: "Node memory is filling up (< 10% left)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+4. Add allerting rules to file prometheus.rules.yaml
 
 5. Config receivers in alertmanager.yml file
 
