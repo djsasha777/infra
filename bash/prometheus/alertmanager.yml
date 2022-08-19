@@ -1,17 +1,22 @@
 global:
-  smtp_smarthost: 'smtp.gmail.com'
-  smtp_from: 'spongermanalex@gmail.com'
-  smtp_auth_username: 'spongermanalex'
-  smtp_auth_password: 'password'
-
-templates:
-- '/etc/alertmanager/template/*.tmpl'
-
+  smtp_smarthost: 'smtp.qq.com:587'
+  smtp_from: 'xxx@qq.com'
+  smtp_auth_username: 'xxx@qq.com'
+  smtp_auth_password: 'password' #Пароль не пароль почтового ящика, а код авторизации почтового ящика
+  resolve_timeout: 5m
 route:
-  repeat_interval: 3h
-  receiver: my-mail
-
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 1h
+  receiver: 'web.hook'
 receivers:
-- name: 'my-mail'
-  email_configs:
-  - to: 'djsasha777@mail.ru'
+  - name: 'web.hook'
+    email_configs:
+    - to: 'example@qq.com' #Почтовый ящик для получения электронного письма с предупреждением
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance']
