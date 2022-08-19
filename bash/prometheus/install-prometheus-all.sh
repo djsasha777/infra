@@ -67,8 +67,8 @@ sudo cp alertmanager-${VERSION}.linux-${ARC}/alertmanager /usr/local/bin/
 sudo cp alertmanager-${VERSION}.linux-${ARC}/amtool /usr/local/bin/
 sudo chown alertmanager:alertmanager /usr/local/bin/alertmanager
 sudo chown alertmanager:alertmanager /usr/local/bin/amtool
-cat ./alertmanager/alertmanager.yml | sudo tee /etc/alertmanager/alertmanager.yml
-cat ./alertmanager/alertmanager.service | sudo tee /etc/systemd/system/alertmanager.service
+cat alertmanager.yml | sudo tee /etc/alertmanager/alertmanager.yml
+cat alertmanager.service | sudo tee /etc/systemd/system/alertmanager.service
 sudo systemctl daemon-reload
 sudo systemctl enable alertmanager
 sudo systemctl start alertmanager
@@ -84,8 +84,8 @@ wget https://github.com/prometheus/blackbox_exporter/releases/download/v${VERSIO
 tar xvzf blackbox_exporter-${VERSION}.linux-${ARC}.tar.gz
 sudo cp blackbox_exporter-${VERSION}.linux-${ARC}/blackbox_exporter /usr/local/bin/
 sudo chown blackbox_exporter:blackbox_exporter /usr/local/bin/blackbox_exporter
-cat ./blackbox/blackbox.yml | sudo tee /etc/blackbox/blackbox.yml
-cat ./blackbox/blackbox_exporter.service | sudo tee /etc/systemd/system/blackbox_exporter.service
+cat blackbox.yml | sudo tee /etc/blackbox/blackbox.yml
+cat blackbox_exporter.service | sudo tee /etc/systemd/system/blackbox_exporter.service
 sudo systemctl daemon-reload
 sudo systemctl enable blackbox_exporter
 sudo systemctl start blackbox_exporter

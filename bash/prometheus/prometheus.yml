@@ -22,15 +22,15 @@ scrape_configs:
     static_configs:
       - targets: ["172.22.48.66:9100"]
 
-  - job_name: "mainLB"
+  - job_name: "main"
     scrape_interval: 5s
     static_configs:
-      - targets: ["172.22.112.207:9100"]
+      - targets: ["192.168.1.167:9100"]
 
   - job_name: "GNS3"
     scrape_interval: 5s
     static_configs:
-      - targets: ["172.22.33.27:9100"]
+      - targets: ["192.168.1.215:9100"]
 
   - job_name: "ubuntuM1"
     scrape_interval: 5s

@@ -1,0 +1,17 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com'
+  smtp_from: 'spongermanalex@gmail.com'
+  smtp_auth_username: 'spongermanalex'
+  smtp_auth_password: 'password'
+
+templates:
+- '/etc/alertmanager/template/*.tmpl'
+
+route:
+  repeat_interval: 3h
+  receiver: my-mail
+
+receivers:
+- name: 'my-mail'
+  email_configs:
+  - to: 'djsasha777@mail.ru'
