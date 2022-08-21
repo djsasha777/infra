@@ -74,33 +74,35 @@ copy modifier cloud image to proxmox
 
 Create a new VM with ID 9000
 
-    qm create 9000 --memory 2048 --net0 virtio,bridge=vmbr0
+    qm create 9009 --memory 2048 --net0 virtio,bridge=vmbr0
 
 Import the downloaded disk to local storage with qcow2 format ---- drive is my local lvm disk
 
-    qm importdisk 9000 CentOS-Stream-GenericCloud-9-20220627.1.x86_64.qcow2 drive --format qcow2
+    qm importdisk 9009 centos2.qcow2 drive
 
 Attach the new disk to the VM as scsi drive
 
-    qm set 9000 --scsihw virtio-scsi-pci --scsi0 drive:vm-9000-disk-0
+    qm set 9009 --scsihw virtio-scsi-pci --scsi0 drive:vm-9009-disk-0
 
 Add Cloud-Init CDROM drive
 
-    qm set 9000 --ide2 drive:cloudinit
+    qm set 9009 --ide2 drive:cloudinit
 
 Speed up booting by setting the bootdisk parameter
 
-    qm set 9000 --boot c --bootdisk scsi0
+    qm set 9009 --boot c --bootdisk scsi0
 
 Configure a serial console for display
 
-    qm set 9000 --serial0 socket --vga serial0
+    qm set 9009 --serial0 socket --vga serial0
 
 Convert the VM into a template
 
-    qm template 9000
+    qm template 9009
 
 Rename
+
+create clone
 
     qm clone 9000 123 --name centos9
 
@@ -145,7 +147,7 @@ Copy inventory/sample as inventory/mycluster
 
 Update Ansible inventory file with inventory builder
 
-    declare -a IPS=(192.168.1.201 192.168.1.202 192.168.1.203 192.168.1.204)
+    declare -a IPS=(192.168.1.111 192.168.1.112 192.168.1.113 192.168.1.114)
     CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${IPS[@]}
 
 Review and change parameters under inventory/mycluster/group_vars
@@ -185,3 +187,26 @@ kubectl config set-context default
 --cluster=kubernetes-the-hard-way
 --user=admin
 --kubeconfig=mycloud.kubeconfig
+
+
+
+
+haproxy cfg
+
+listen kubernetes-apiserver-https
+  bind *:8383
+  mode tcp
+  option log-health-checks
+  timeout client 3h
+  timeout server 3h
+  server master1 192.168.1.111:6443 check check-ssl verify none inter 10000
+  server master2 192.168.1.112:6443 check check-ssl verify none inter 10000
+  balance roundrobin
+
+
+
+
+
+
+
+
