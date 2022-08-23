@@ -12,12 +12,12 @@ dependency_check_deb() {
 java -version
 if [ $? -ne 0 ]
     then
-        # Installing Java 7 if it's not installed
-        sudo apt-get install openjdk-7-jre-headless -y
+        # Installing Java 13 if it's not installed
+        sudo apt-get install openjdk-13-jre-headless -y
     # Checking if java installed is less than version 7. If yes, installing Java 7. As logstash & Elasticsearch require Java 7 or later.
     elif [ "`java -version 2> /tmp/version && awk '/version/ { gsub(/"/, "", $NF); print ( $NF < 1.7 ) ? "YES" : "NO" }' /tmp/version`" == "YES" ]
         then
-            sudo apt-get install openjdk-7-jre-headless -y
+            sudo apt-get install openjdk-13-jre-headless -y
 fi
 }
 
@@ -26,11 +26,11 @@ dependency_check_rpm() {
     if [ $? -ne 0 ]
         then
             #Installing Java 7 if it's not installed
-            sudo yum install jre-1.7.0-openjdk -y
+            sudo yum install jre-13.0.2-openjdk -y
         # Checking if java installed is less than version 7. If yes, installing Java 7. As logstash & Elasticsearch require Java 7 or later.
         elif [ "`java -version 2> /tmp/version && awk '/version/ { gsub(/"/, "", $NF); print ( $NF < 1.7 ) ? "YES" : "NO" }' /tmp/version`" == "YES" ]
             then
-                sudo yum install jre-1.7.0-openjdk -y
+                sudo yum install jre-13.0.7-openjdk -y
     fi
 }
 
@@ -38,15 +38,15 @@ debian_elk() {
     # resynchronize the package index files from their sources.
     sudo apt-get update
     # Downloading debian package of logstash
-    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/logstash/logstash-7.4.1.deb
+    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/logstash/logstash-8.3.3.deb
     # Install logstash debian package
     sudo dpkg -i /opt/logstash*.deb
     # Downloading debian package of elasticsearch
-    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.1-amd64.deb
+    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-amd64.deb
     # Install debian package of elasticsearch
     sudo dpkg -i /opt/elasticsearch*.deb
     # Download kibana tarball in /opt
-    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/kibana/kibana-7.4.1-amd64.deb
+    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/kibana/kibana-8.3.3-amd64.deb
     # Extracting kibana tarball
     sudo dpkg -i /opt/kibana*.deb
     # Starting The Services
@@ -59,15 +59,15 @@ rpm_elk() {
     #Installing wget.
     sudo yum install wget -y
     # Downloading rpm package of logstash
-    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/logstash/logstash-7.4.1.rpm
+    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/logstash/logstash-8.3.3.rpm
     # Install logstash rpm package
     sudo rpm -ivh /opt/logstash*.rpm
     # Downloading rpm package of elasticsearch
-    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.4.1-x86_64.rpm
+    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.3.3-x86_64.rpm
     # Install rpm package of elasticsearch
     sudo rpm -ivh /opt/elasticsearch*.rpm
     # Download kibana tarball in /opt
-    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/kibana/kibana-7.4.1-x86_64.rpm
+    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/kibana/kibana-8.3.3-x86_64.rpm
     # Extracting kibana tarball
     sudo rpm -ivh /opt/kibana*.rpm
     # Starting The Services
@@ -95,5 +95,5 @@ else
 fi
 
 #logstash configure
-copy logstash-configs/* /etc/logstash/conf.d/
+cp logstash-configs/* /etc/logstash/conf.d/
 systemctl restart logstash
