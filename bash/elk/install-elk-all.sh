@@ -30,7 +30,7 @@ dependency_check_rpm() {
         # Checking if java installed is less than version 7. If yes, installing Java 7. As logstash & Elasticsearch require Java 7 or later.
         elif [ "`java -version 2> /tmp/version && awk '/version/ { gsub(/"/, "", $NF); print ( $NF < 1.7 ) ? "YES" : "NO" }' /tmp/version`" == "YES" ]
             then
-                sudo yum install jre-13.0.7-openjdk -y
+                sudo yum install jre-13.0.2-openjdk -y
     fi
 }
 
@@ -38,7 +38,7 @@ debian_elk() {
     # resynchronize the package index files from their sources.
     sudo apt-get update
     # Downloading debian package of logstash
-    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/logstash/logstash-8.3.3.deb
+    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/logstash/logstash-8.3.3-amd64.deb
     # Install logstash debian package
     sudo dpkg -i /opt/logstash*.deb
     # Downloading debian package of elasticsearch
@@ -59,7 +59,7 @@ rpm_elk() {
     #Installing wget.
     sudo yum install wget -y
     # Downloading rpm package of logstash
-    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/logstash/logstash-8.3.3.rpm
+    sudo wget --directory-prefix=/opt/ https://artifacts.elastic.co/downloads/logstash/logstash-8.3.3-x86_64.rpm
     # Install logstash rpm package
     sudo rpm -ivh /opt/logstash*.rpm
     # Downloading rpm package of elasticsearch
