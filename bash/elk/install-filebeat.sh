@@ -12,4 +12,5 @@ else
   echo "DISTRIBUTIVE NOT SUPPORT!"
 fi
 echo "Filebeat are installed!"
-cp filebeat.yml /etc/filebeat/filebeat.yml
+#cp filebeat.yml /etc/filebeat/filebeat.yml
+#systemctl restart filebeat
