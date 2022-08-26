@@ -17,23 +17,7 @@ filebeat.inputs:
 # Each - is an input. Most options can be set at the input level, so
 # you can use different inputs for various configurations.
 # Below are the input specific configurations.
-- type: log
-  enabled: true
-  paths:
-      - /var/log/nginx/*-access.log
-  fields:
-    type: nginx_access
-  fields_under_root: true
-  scan_frequency: 5s
 
-- type: log
-  enabled: true
-  paths:
-      - /var/log/nginx/*-error.log
-  fields:
-    type: nginx_error
-  fields_under_root: true
-  scan_frequency: 5s  
 # filestream is an input for collecting log messages from files.
 - type: filestream
 
@@ -41,7 +25,7 @@ filebeat.inputs:
   id: my-filestream-id
 
   # Change to true to enable this input configuration.
-  enabled: false
+  enabled: true
 
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
@@ -148,9 +132,9 @@ setup.kibana:
 # Configure what output to use when sending the data collected by the beat.
 
 # ---------------------------- Elasticsearch Output ----------------------------
-output.elasticsearch:
+#output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["localhost:9200"]
+  #hosts: ["localhost:9200"]
 
   # Protocol - either `http` (default) or `https`.
   #protocol: "https"
