@@ -19,10 +19,10 @@ provider "proxmox" {
 resource "proxmox_vm_qemu" "node" {
 
   count = 4
-  name = "ce-kub-${count.index + 1}"
+  name = "kubern-${count.index + 1}"
   target_node = "proxmox"
   
-  clone = "centos"
+  clone = "ubuntu"
 
   agent = 1
   os_type = "cloud-init"
@@ -30,12 +30,12 @@ resource "proxmox_vm_qemu" "node" {
   sockets = 1
   vcpus = 0
   cpu = "host"
-  memory = 4096
+  memory = 8192
   scsihw = "virtio-scsi-pci"
   bootdisk = "scsi0"
 
   disk {
-    size            = "25G"
+    size            = "100G"
     type            = "scsi"
     storage         = "drive"
     iothread = 1
