@@ -3,7 +3,7 @@ VERS=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
 if [[ "$VERS" == 'ubuntu' ]]; then
 echo "your distributive is ${VERS}"
 sudo apt update
-sudo apt instll -y haproxy
+sudo apt install -y haproxy
 elif [[ "$VERS" == 'centos' ]]; then
 echo "your distributive is ${VERS}"
 yum install haproxy
