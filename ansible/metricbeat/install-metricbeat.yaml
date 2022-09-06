@@ -1,30 +1,32 @@
 ---
-- name: Elastic APT Key
-  apt_key: 
-    state=present
-    url="{{metricbeat_apt_key}}"
-
-- name : MetricBeat APT Repository
-  apt_repository:
-    state=present
-    repo="deb {{metricbeat_apt_repository}} stable main"
-    update_cache=yes
-  when: metricbeat_use_repo
-  
-- name: Install MetricBeat (Debian)
+# tasks file for metricbeat
+- name: Install deb package for metricbeat
   apt:
-    state="{{ (metricbeat_upgrade) | ternary('latest', 'present') }}"
-    name="{{item}}"
-  with_items: "{{ metricbeat_packages }}"
-  notify: metricbeat restart
-  when: metricbeat_use_repo
-
-- name: Install MetricBeat .deb
-  apt:
-    deb: "{{ metricbeat_baseurl }}/{{ item }}-{{ metricbeat_version }}-amd64.deb"
+    deb: "{{metricbeat_package_url}}"
     state: present
-  with_items: "{{ metricbeat_packages }}"
-  notify: metricbeat restart
-  when: not metricbeat_use_repo
 
-# vi:ts=2:sw=2:et:ft=yaml
+- name: Template metricbeat config
+  template:
+    src: ./templates/metricbeat.yml.j2
+    dest: /etc/metricbeat/metricbeat.yml
+  notify:
+    - restart metricbeat 
+
+- name: metricbeat modules enable system
+  ansible.builtin.command: metricbeat modules enable system
+  become: yes
+  #become_user: root
+  register: metr
+
+- name: metricbeat setup
+  ansible.builtin.command: metricbeat setup
+  become: yes
+  #become_user: root
+  register: metr
+
+- name: Ensure metricbeat is running (and enable it at boot)
+  service: 
+    name: metricbeat 
+    enabled: yes
+  notify:
+    - restart metricbeat 
