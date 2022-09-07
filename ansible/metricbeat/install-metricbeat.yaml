@@ -11,7 +11,7 @@
   tasks:
     - name: Download package
       ansible.builtin.get_url:
-        url: {{ metricbeat_package_url }}
+        url: "{{ metricbeat_package_url }}"
         dest: /home/metricbeat.deb
         mode: '0777'
 
