@@ -1,37 +1,46 @@
 ---
 # tasks file for metricbeat
-- name: Download package
-  ansible.builtin.get_url:
-    url: ftp://192.168.1.1/AiDisk_a1/repository/metricbeat-8.3.3-amd64.deb
-    dest: /home/metricbeat-8.3.3-amd64.deb
-    mode: '0777'
-
-- name: Install deb package for metricbeat
+- hosts: "metrichost"
+  remote_user: ubuntu
   become: yes
-  ansible.builtin.command: dpkg -i /home/metricbeat-8.3.3-amd64.deb
+  become_method: sudo
+  become_user: root
+  gather_facts: yes
+  connection: ssh
+  
+  tasks:
+    - name: Download package
+      ansible.builtin.get_url:
+        url: ftp://192.168.1.1/AiDisk_a1/repository/metricbeat-8.3.3-amd64.deb
+        dest: /home/metricbeat-8.3.3-amd64.deb
+        mode: '0777'
 
-- name: Template metricbeat config
-  template:
-    src: ./templates/metricbeat.yml.j2
-    dest: /etc/metricbeat/metricbeat.yml
-  notify:
-    - restart metricbeat 
+    - name: Install deb package for metricbeat
+      become: yes
+      ansible.builtin.command: dpkg -i /home/metricbeat-8.3.3-amd64.deb
 
-- name: metricbeat modules enable system
-  ansible.builtin.command: metricbeat modules enable system
-  become: yes
-  #become_user: root
-  register: metr
+    - name: Template metricbeat config
+      template:
+        src: ./templates/metricbeat.yml.j2
+        dest: /etc/metricbeat/metricbeat.yml
+      notify:
+        - restart metricbeat 
 
-- name: metricbeat setup
-  ansible.builtin.command: metricbeat setup
-  become: yes
-  #become_user: root
-  register: metr
+    - name: metricbeat modules enable system
+      ansible.builtin.command: metricbeat modules enable system
+      become: yes
+      #become_user: root
+      register: metr
 
-- name: Ensure metricbeat is running (and enable it at boot)
-  service: 
-    name: metricbeat 
-    enabled: yes
-  notify:
-    - restart metricbeat 
+    - name: metricbeat setup
+      ansible.builtin.command: metricbeat setup
+      become: yes
+      #become_user: root
+      register: metr
+
+    - name: Ensure metricbeat is running (and enable it at boot)
+      service: 
+        name: metricbeat 
+        enabled: yes
+      notify:
+        - restart metricbeat 
