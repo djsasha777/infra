@@ -1,6 +1,0 @@
----
-# handlers file for metricbeat
-- name: restart metricbeat
-  service: 
-    name: metricbeat 
-    state: restarted

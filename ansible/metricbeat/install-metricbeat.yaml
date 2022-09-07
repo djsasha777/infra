@@ -22,20 +22,14 @@
       template:
         src: ./templates/metricbeat.yml.j2
         dest: /etc/metricbeat/metricbeat.yml
-      notify:
-        - restart metricbeat 
 
     - name: metricbeat modules enable system
       ansible.builtin.command: metricbeat modules enable system
-      register: metr
 
     - name: metricbeat setup
       ansible.builtin.command: metricbeat setup
-      register: metr
 
     - name: Ensure metricbeat is running (and enable it at boot)
       service: 
         name: metricbeat 
         enabled: yes
-      notify:
-        - restart metricbeat 
