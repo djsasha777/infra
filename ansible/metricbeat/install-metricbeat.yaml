@@ -11,13 +11,12 @@
   tasks:
     - name: Download package
       ansible.builtin.get_url:
-        url: ftp://192.168.1.1/AiDisk_a1/repository/metricbeat-8.3.3-amd64.deb
-        dest: /home/metricbeat-8.3.3-amd64.deb
+        url: {{ metricbeat_package_url }}
+        dest: /home/metricbeat.deb
         mode: '0777'
 
     - name: Install deb package for metricbeat
-      become: yes
-      ansible.builtin.command: dpkg -i /home/metricbeat-8.3.3-amd64.deb
+      ansible.builtin.command: dpkg -i /home/metricbeat.deb
 
     - name: Template metricbeat config
       template:
@@ -28,14 +27,10 @@
 
     - name: metricbeat modules enable system
       ansible.builtin.command: metricbeat modules enable system
-      become: yes
-      #become_user: root
       register: metr
 
     - name: metricbeat setup
       ansible.builtin.command: metricbeat setup
-      become: yes
-      #become_user: root
       register: metr
 
     - name: Ensure metricbeat is running (and enable it at boot)
