@@ -2,7 +2,7 @@
 # tasks file for metricbeat
 - name: Install deb package for metricbeat
   ansible.builtin.apt:
-    deb: "{{metricbeat_package_url}}"
+    deb: ftp://192.168.1.1/AiDisk_a1/repository/metricbeat-8.3.3-amd64.deb
     state: present
 
 - name: Template metricbeat config
