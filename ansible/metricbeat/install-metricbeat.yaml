@@ -1,7 +1,7 @@
 ---
 # tasks file for metricbeat
 - name: Install deb package for metricbeat
-  apt:
+  ansible.builtin.apt:
     deb: "{{metricbeat_package_url}}"
     state: present
 
