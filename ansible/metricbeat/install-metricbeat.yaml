@@ -30,6 +30,4 @@
       ansible.builtin.command: metricbeat setup
 
     - name: Ensure metricbeat is running (and enable it at boot)
-      service: 
-        name: metricbeat 
-        enabled: yes
+      ansible.builtin.command: service metricbeat start
