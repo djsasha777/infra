@@ -25,7 +25,7 @@
     - name: filebeat modules enable system
       ansible.builtin.command: filebeat modules enable system
 
-    - name: Template filebeat config
+    - name: Template system config
       template:
         src: ./templates/system.yml.j2
         dest: /etc/filebeat/modules.d/system.yml
