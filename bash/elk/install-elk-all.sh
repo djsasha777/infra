@@ -95,5 +95,5 @@ else
 fi
 
 #logstash configure
-cp logstash-configs/* /etc/logstash/conf.d/
+cp conf.d/* /etc/logstash/conf.d/
 systemctl restart logstash
