@@ -86,9 +86,9 @@ sudo sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php/7.4/cli/php.ini
 
 #Download and Install FreePBX
 cd /usr/src
-sudo wget http://mirror.freepbx.org/modules/packages/freepbx/freepbx-15.0-latest.tgz
-sudo tar xfz freepbx-15.0-latest.tgz
-sudo rm -f freepbx-15.0-latest.tgz
+sudo wget http://mirror.freepbx.org/modules/packages/freepbx/freepbx-16.0-latest.tgz
+sudo tar xfz freepbx-16.0-latest.tgz
+sudo rm -f freepbx-16.0-latest.tgz
 cd freepbx
 sudo ./start_asterisk start
 curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
@@ -105,9 +105,9 @@ sudo ufw allow 5060
 sudo ufw allow 5061
 
 #That’s it!. You have a ready Asterisk 15 with FreePBX 15 on your Ubuntu server. Open up your web browser and connect to the ip_address_or_hostname/admin of your new FreePBX server.
-Visit: http://ip_address_or_hostname/admin
+#Visit: http://localhost/admin
 
 #configure and restart asterisk
-cp sip.cong /etc/asterisk/sip.conf
-cp extensions.conf /etc/asterisk/extensions.conf
-systemctl restart asterisk
+# cp sip.cong /etc/asterisk/sip.conf
+# cp extensions.conf /etc/asterisk/extensions.conf
+# systemctl restart asterisk
