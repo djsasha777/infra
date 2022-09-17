@@ -29,7 +29,7 @@ cat >> /etc/iptables.sh <<EOF
 #!/bin/bash
 # global intefrace
 export WAN=eth0
-export WAN_IP=147.15.218.72
+export WAN_IP=192.168.1.117
 # clean iptables
 iptables -F
 iptables -F -t nat
@@ -46,28 +46,20 @@ iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 # allow outgoing connection of a server
 $IPT -A OUTPUT -o $WAN -j ACCEPT
-
-# Состояние ESTABLISHED говорит о том, что это не первый пакет в соединении.
-# Пропускать все уже инициированные соединения, а также дочерние от них
+# drop non inicialized connections
 iptables -A INPUT -p all -m state --state ESTABLISHED,RELATED -j ACCEPT
-# Пропускать новые, а так же уже инициированные и их дочерние соединения
+# allow new connections
 iptables -A OUTPUT -p all -m state --state ESTABLISHED,RELATED -j ACCEPT
-# Разрешить форвардинг для уже инициированных и их дочерних соединений
+# allow forward
 iptables -A FORWARD -p all -m state --state ESTABLISHED,RELATED -j ACCEPT
-
-# Включаем фрагментацию пакетов. Необходимо из за разных значений MTU
+# switch on fragmentation
 iptables -I FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
-
-# Отбрасывать все пакеты, которые не могут быть идентифицированы
-# и поэтому не могут иметь определенного статуса.
+# drop invalid packets
 iptables -A INPUT -m state --state INVALID -j DROP
 iptables -A FORWARD -m state --state INVALID -j DROP
-
-# Приводит к связыванию системных ресурсов, так что реальный
-# обмен данными становится не возможным, обрубаем
+# drop
 iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
 iptables -A OUTPUT -p tcp ! --syn -m state --state NEW -j DROP
-
 # allow ping 
 iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
 iptables -A INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT
