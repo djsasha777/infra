@@ -45,7 +45,7 @@ iptables -P FORWARD DROP
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
 # allow outgoing connection of a server
-$IPT -A OUTPUT -o $WAN -j ACCEPT
+iptables -A OUTPUT -o $WAN -j ACCEPT
 # drop non inicialized connections
 iptables -A INPUT -p all -m state --state ESTABLISHED,RELATED -j ACCEPT
 # allow new connections
