@@ -151,7 +151,7 @@ Review and change parameters under inventory/mycluster/group_vars
 
 Deploy Kubespray with Ansible Playbook - run the playbook as root The option --become is required, as for example writing SSL keys in /etc/, installing packages and interacting with various systemd daemons. Without --become the playbook will fail to run!
 
-    ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root cluster.yml
+    ansible-playbook -i inventory/mycluster/hosts.yaml  --become --become-user=root --ask-pass --ask-become-pass cluster.yml
 
 
 10. connect to kubernetes with kubeconfig
