@@ -6,34 +6,22 @@ if [[ "$VERS" == 'ubuntu' ]]; then
 echo "your distributive is ${VERS}"
 apt update
 apt upgrade -y
-apt install nano unzip
+apt install -y nano unzip 
 mkdir lokiinstall
 cd lokiinstall
-wget https://github.com/grafana/loki/releases/download/v2.7.3/loki-linux-amd64.zip
-wget https://github.com/grafana/loki/releases/download/v2.7.3/promtail-linux-amd64.zip
-wget https://raw.githubusercontent.com/grafana/loki/main/cmd/loki/loki-local-config.yaml
-wget https://raw.githubusercontent.com/grafana/loki/main/clients/cmd/promtail/promtail-local-config.yaml
-unzip loki-linux-amd64.zip
-unzip promtail-linux-amd64.zip
-./loki-linux-amd64 -config.file=loki-local-config.yaml
-./promtail-linux-amd64 -config.file=loki-local-config.yaml
-cd ..
-rm -rf lokiinstall
+wget https://github.com/grafana/loki/releases/download/v2.7.3/loki_2.7.3_amd64.deb
+wget https://github.com/grafana/loki/releases/download/v2.7.3/promtail_2.7.3_amd64.deb
+dpkg -i loki_2.7.3_amd64.deb
+dpkg -i promtail_2.7.3_amd64.deb
 elif [[ "$VERS" == 'centos' ]]; then
 echo "your distributive is ${VERS}"
 dnf install nano unzip
 mkdir lokiinstall
 cd lokiinstall
-wget https://github.com/grafana/loki/releases/download/v2.7.3/loki-linux-amd64.zip
-wget https://github.com/grafana/loki/releases/download/v2.7.3/promtail-linux-amd64.zip
-wget https://raw.githubusercontent.com/grafana/loki/main/cmd/loki/loki-local-config.yaml
-wget https://raw.githubusercontent.com/grafana/loki/main/clients/cmd/promtail/promtail-local-config.yaml
-unzip loki-linux-amd64.zip
-unzip promtail-linux-amd64.zip
-./loki-linux-amd64 -config.file=loki-local-config.yaml
-./promtail-linux-amd64 -config.file=loki-local-config.yaml
-cd ..
-rm -rf lokiinstall
+wget https://github.com/grafana/loki/releases/download/v2.7.3/loki-2.7.3.x86_64.rpm
+wget https://github.com/grafana/loki/releases/download/v2.7.3/promtail-2.7.3.x86_64.rpm
+rpm -i loki-2.7.3.x86_64.rpm
+rpm -i promtail-2.7.3.x86_64.rpm
 else
   echo "DISTRIBUTIVE NOT SUPPORT!"
 fi
