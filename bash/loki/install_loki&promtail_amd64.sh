@@ -1,6 +1,5 @@
 #!/bin/bash
 echo "This script will install loki on your system!"
-
 VERS=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
 if [[ "$VERS" == 'ubuntu' ]]; then
 echo "your distributive is ${VERS}"
