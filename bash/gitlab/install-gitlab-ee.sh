@@ -12,6 +12,9 @@ if [ "$(grep -Ei 'debian|buntu|mint' /etc/*release)" ]
         EXTERNAL_URL="https://172.22.22.115" dpkg -i gitlab-ee_15.6.7-ee.0_amd64.deb
         dpkg -i gitlab-ee_15.6.7-ee.0_amd64.deb
         cat /etc/gitlab/initial_root_password
+        wget ftp://192.168.1.1/AiDisk_a1/repository/gitlab-runner_amd64.deb
+        dpkg -i gitlab-runner_amd64.deb
+
 
 elif [ "$(grep -Ei 'fedora|redhat|centos' /etc/*release)" ]
     then
@@ -28,6 +31,8 @@ elif [ "$(grep -Ei 'fedora|redhat|centos' /etc/*release)" ]
         EXTERNAL_URL="https://172.22.22.115" dpkg -i gitlab-ee_15.6.7-ee.0_amd64.deb
         dnf -i gitlab-ee_15.6.7-ee.0_amd64.deb
         cat /etc/gitlab/initial_root_password
+        wget ftp://192.168.1.1/AiDisk_a1/repository/gitlab-runner_amd64.rpm
+        dnf -i gitlab-runner_amd64.rpm
 else
     echo "This script doesn't support gitlab installation on this OS."
 fi
