@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 FILE=backup.sql.`date +"%Y%m%d"`
 DBSERVER=127.0.0.1
