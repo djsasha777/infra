@@ -1,0 +1,1 @@
+## OPENSHIFT ON BAREMETAL install
