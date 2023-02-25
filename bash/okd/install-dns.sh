@@ -29,7 +29,7 @@ cat  >> named.conf <<EOF
 // configuration located in /usr/share/doc/bind-{version}/Bv9ARM.html
 
 options {
-	listen-on port 53 { 127.0.0.1; 192.168.1.210; };
+	listen-on port 53 { 127.0.0.1; 192.168.1.60; };
 #	listen-on-v6 port 53 { ::1; };
 	directory 	"/var/named";
 	dump-file 	"/var/named/data/cache_dump.db";
@@ -118,10 +118,10 @@ $TTL    604800
 ; OpenShift Container Platform Cluster - PTR records
 200    IN    PTR    okd4-bootstrap.okd.home.lab.
 201    IN    PTR    okd4-control-plane-1.okd.home.lab.
-202    IN    PTR    okd4-control-plane-2.okd.home.lab.
-203    IN    PTR    okd4-control-plane-3.okd.home.lab.
+; 202    IN    PTR    okd4-control-plane-2.okd.home.lab.
+; 203    IN    PTR    okd4-control-plane-3.okd.home.lab.
 204    IN    PTR    okd4-compute-1.okd.home.lab.
-205    IN    PTR    okd4-compute-2.okd.home.lab.
+; 205    IN    PTR    okd4-compute-2.okd.home.lab.
 210    IN    PTR    api.okd.home.lab.
 210    IN    PTR    api-int.okd.home.lab.
 EOF
@@ -141,30 +141,30 @@ $TTL    604800
     IN      NS      okd4-services
 
 ; name servers - A records
-okd4-services.home.lab.          IN      A       192.168.1.210
+okd4-services.home.lab.          IN      A       192.168.1.60
 
 ; OpenShift Container Platform Cluster - A records
-okd4-bootstrap.okd.home.lab.        IN      A      192.168.1.200
-okd4-control-plane-1.okd.home.lab.        IN      A      192.168.1.201
-okd4-control-plane-2.okd.home.lab.         IN      A      192.168.1.202
-okd4-control-plane-3.okd.home.lab.         IN      A      192.168.1.203
-okd4-compute-1.okd.home.lab.        IN      A      192.168.1.204
-okd4-compute-2.okd.home.lab.        IN      A      192.168.1.205
+okd4-bootstrap.okd.home.lab.        IN      A      192.168.1.61
+okd4-control-plane-1.okd.home.lab.        IN      A      192.168.1.62
+; okd4-control-plane-2.okd.home.lab.         IN      A      192.168.1.63
+; okd4-control-plane-3.okd.home.lab.         IN      A      192.168.1.64
+okd4-compute-1.okd.home.lab.        IN      A      192.168.1.65
+; okd4-compute-2.okd.home.lab.        IN      A      192.168.1.66
 
 ; OpenShift internal cluster IPs - A records
-api.okd.home.lab.    IN    A    192.168.1.210
-api-int.okd.home.lab.    IN    A    192.168.1.210
-*.apps.okd.home.lab.    IN    A    192.168.1.210
-etcd-0.okd.home.lab.    IN    A     192.168.1.201
-etcd-1.okd.home.lab.    IN    A     192.168.1.202
-etcd-2.okd.home.lab.    IN    A    192.168.1.203
-console-openshift-console.apps.okd.home.lab.     IN     A     192.168.1.210
-oauth-openshift.apps.okd.home.lab.     IN     A     192.168.1.210
+api.okd.home.lab.    IN    A    192.168.1.60
+api-int.okd.home.lab.    IN    A    192.168.1.61
+*.apps.okd.home.lab.    IN    A    192.168.1.61
+etcd-0.okd.home.lab.    IN    A     192.168.1.62
+; etcd-1.okd.home.lab.    IN    A     192.168.1.63
+; etcd-2.okd.home.lab.    IN    A    192.168.1.64
+console-openshift-console.apps.okd.home.lab.     IN     A     192.168.1.61
+oauth-openshift.apps.okd.home.lab.     IN     A     192.168.1.61
 
 ; OpenShift internal cluster IPs - SRV records
 _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-0.lab
-_etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-1.lab
-_etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-2.lab
+; _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-1.lab
+; _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-2.lab
 EOF
 
 ### change install-config.yaml
