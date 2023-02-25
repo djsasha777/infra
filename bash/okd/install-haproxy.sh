@@ -1,16 +1,6 @@
 #!/bin/bash
-# EXTERNAL LOAD BALANCER FOR KUBERNETES SETUP
-VERS=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
-if [[ "$VERS" == 'ubuntu' ]]; then
-echo "your distributive is ${VERS}"
-sudo apt update
-sudo apt install -y haproxy
-elif [[ "$VERS" == 'centos' ]]; then
-echo "your distributive is ${VERS}"
-yum install haproxy
-else
-  echo "DISTRIBUTIVE NOT SUPPORT!"
-fi
+#  LOAD BALANCER install
+dnf install haproxy
 echo "HAproxy server software is installed! now configuring!"
 cat  >> /etc/haproxy/haproxy.cfg <<EOF
 
@@ -67,4 +57,4 @@ backend okd4_https_ingress_traffic_be
     # server      okd4-compute-2 192.168.1.65:443 check
 EOF
 sudo systemctl restart haproxy  
-echo "DONE"
+echo "haproxy installation and configuration is DONE"
