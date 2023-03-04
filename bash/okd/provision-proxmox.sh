@@ -1,6 +1,6 @@
 #!/bin/bash
 
-qm create 600 --cdrom ROUTER:iso/redos-7.3.2.iso \
+qm create 600 --cdrom local:iso/CentOS-Stream-9-latest-x86_64-dvd1.iso \
   --name "okd4-services" --numa 0 --ostype l26 \
   --cpu cputype=host --cores 1 --sockets 1 \
   --memory 2048  \

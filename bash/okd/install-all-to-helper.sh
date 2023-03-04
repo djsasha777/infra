@@ -272,6 +272,8 @@ backend okd4_https_ingress_traffic_be
     server      okd4-compute-1 192.168.1.64:443 check
     # server      okd4-compute-2 192.168.1.65:443 check
 EOF
+setsebool -P haproxy_connect_any=1
+sudo systemctl enable haproxy
 sudo systemctl restart haproxy  
 echo "haproxy installation and configuration is DONE"
 echo "add firewall rules"
@@ -337,3 +339,22 @@ sudo mv fedora-coreos-37.20230205.3.0-metal.x86_64.raw.xz.sig fcos.raw.xz.sig
 sudo chown -R apache: /var/www/html/
 sudo chmod -R 755 /var/www/html/
 
+# run VMs and make postinstal commands!!!
+
+# start bootstraping
+
+cd
+openshift-install --dir=installdir/ wait-for bootstrap-complete --log-level=info
+
+export KUBECONFIG=~/install_dir/auth/kubeconfig
+oc whoami
+oc get nodes
+oc get csr
+
+wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+chmod +x jq
+sudo mv jq /usr/local/bin/
+jq --version
+oc get csr -ojson | jq -r '.items[] | select(.status == {} ) | .metadata.name' | \
+xargs oc adm certificate approve
+oc get clusteroperators
