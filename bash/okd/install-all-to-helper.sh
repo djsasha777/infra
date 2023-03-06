@@ -16,6 +16,8 @@ echo "please enter the domain name"
 read -r DOMAINID
 echo "Setting cluster domain name to: $CLUSTERID.$DOMAINID"
 
+ls 
+
 ### change named.conf
 echo "#######Changing file - named.conf..."
 cat  >> named.conf <<EOF
@@ -199,6 +201,8 @@ sudo sed -i 's/home.lab/'$DOMAINID'/' named.conf.local
 sudo sed -i 's/home.lab/'$DOMAINID'/' install-config.yaml
 sudo sed -i 's/name: okd/name: '$CLUSTERID'/' install-config.yaml
 
+ls 
+
 # dns configure
 echo "dns files configure"
 sudo cp named.conf /etc/named.conf
@@ -341,20 +345,3 @@ sudo chmod -R 755 /var/www/html/
 
 # run VMs and make postinstal commands!!!
 
-# start bootstraping
-
-cd
-openshift-install --dir=installdir/ wait-for bootstrap-complete --log-level=info
-
-export KUBECONFIG=~/install_dir/auth/kubeconfig
-oc whoami
-oc get nodes
-oc get csr
-
-wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
-chmod +x jq
-sudo mv jq /usr/local/bin/
-jq --version
-oc get csr -ojson | jq -r '.items[] | select(.status == {} ) | .metadata.name' | \
-xargs oc adm certificate approve
-oc get clusteroperators
