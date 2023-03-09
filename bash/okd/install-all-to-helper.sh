@@ -6,7 +6,7 @@ sudo dnf update -y
 cd
 mkdir installdir
 cd installdir
-sudo dnf -y install bind bind-utils
+sudo dnf -y install bind bind-utils wget tar
 echo "########creating files"
 touch named.conf named.conf.local db.192.168.1 db.home.lab install-config.yaml
 # file changing
@@ -16,7 +16,7 @@ echo "please enter the domain name"
 read -r DOMAINID
 echo "Setting cluster domain name to: $CLUSTERID.$DOMAINID"
 
-ls 
+# ls 
 
 ### change named.conf
 echo "#######Changing file - named.conf..."
@@ -139,13 +139,13 @@ okd4-compute-1.okd.home.lab.        IN      A      192.168.1.65
 
 ; OpenShift internal cluster IPs - A records
 api.okd.home.lab.    IN    A    192.168.1.60
-api-int.okd.home.lab.    IN    A    192.168.1.61
-*.apps.okd.home.lab.    IN    A    192.168.1.61
+api-int.okd.home.lab.    IN    A    192.168.1.60
+*.apps.okd.home.lab.    IN    A    192.168.1.60
 etcd-0.okd.home.lab.    IN    A     192.168.1.62
 ; etcd-1.okd.home.lab.    IN    A     192.168.1.63
 ; etcd-2.okd.home.lab.    IN    A    192.168.1.64
-console-openshift-console.apps.okd.home.lab.     IN     A     192.168.1.61
-oauth-openshift.apps.okd.home.lab.     IN     A     192.168.1.61
+console-openshift-console.apps.okd.home.lab.     IN     A     192.168.1.60
+oauth-openshift.apps.okd.home.lab.     IN     A     192.168.1.60
 
 ; OpenShift internal cluster IPs - SRV records
 _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-0.lab
@@ -201,7 +201,7 @@ sudo sed -i 's/home.lab/'$DOMAINID'/' named.conf.local
 sudo sed -i 's/home.lab/'$DOMAINID'/' install-config.yaml
 sudo sed -i 's/name: okd/name: '$CLUSTERID'/' install-config.yaml
 
-ls 
+# ls 
 
 # dns configure
 echo "dns files configure"
@@ -233,8 +233,8 @@ frontend okd4_k8s_api_fe
 backend okd4_k8s_api_be
     balance source
     mode tcp
-    server      okd4-bootstrap 192.168.1.60:6443 check
-    server      okd4-control-plane-1 192.168.1.61:6443 check
+    server      okd4-bootstrap 192.168.1.61:6443 check
+    server      okd4-control-plane-1 192.168.1.62:6443 check
     # server      okd4-control-plane-2 192.168.1.62:6443 check
     # server      okd4-control-plane-3 192.168.1.63:6443 check
 
@@ -247,8 +247,8 @@ frontend okd4_machine_config_server_fe
 backend okd4_machine_config_server_be
     balance source
     mode tcp
-    server      okd4-bootstrap 192.168.1.60:22623 check
-    server      okd4-control-plane-1 192.168.1.61:22623 check
+    server      okd4-bootstrap 192.168.1.61:22623 check
+    server      okd4-control-plane-1 192.168.1.62:22623 check
     # server      okd4-control-plane-2 192.168.1.62:22623 check
     # server      okd4-control-plane-3 192.168.1.63:22623 check
 
@@ -261,7 +261,7 @@ frontend okd4_http_ingress_traffic_fe
 backend okd4_http_ingress_traffic_be
     balance source
     mode tcp
-    server      okd4-compute-1 192.168.1.64:80 check
+    server      okd4-compute-1 192.168.1.65:80 check
     # server      okd4-compute-2 192.168.1.65:80 check
 
 frontend okd4_https_ingress_traffic_fe
@@ -273,7 +273,7 @@ frontend okd4_https_ingress_traffic_fe
 backend okd4_https_ingress_traffic_be
     balance source
     mode tcp
-    server      okd4-compute-1 192.168.1.64:443 check
+    server      okd4-compute-1 192.168.1.65:443 check
     # server      okd4-compute-2 192.168.1.65:443 check
 EOF
 setsebool -P haproxy_connect_any=1
@@ -296,21 +296,16 @@ sudo systemctl enable httpd
 sudo systemctl start httpd
 sudo firewall-cmd --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
-curl localhost:8080
 
-# install okd
-wget https://github.com/okd-project/okd/releases/download/4.12.0-0.okd-2023-02-18-033438/openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
-wget https://github.com/okd-project/okd/releases/download/4.12.0-0.okd-2023-02-18-033438/openshift-install-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
+wget ftp://192.168.1.1/AiDisk_a1/repository/openshift-client-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
+wget ftp://192.168.1.1/AiDisk_a1/repository/openshift-install-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
 
 #Extract the okd version of the oc client and openshift-install:
-tar -zxvf openshift-client-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
-tar -zxvf openshift-install-linux-4.12.0-0.okd-2023-02-18-033438.tar.gz
+tar -zxvf openshift-client-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
+tar -zxvf openshift-install-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
 
 #Move the kubectl, oc, and openshift-install to /usr/local/bin and show the version:
 sudo mv kubectl oc openshift-install /usr/local/bin/
-#Test oc client and openshift-install command
-oc version
-openshift-install version
 
 #generate ssh key
 sudo ssh-keygen -f cluster-install-ssh -t rsa -b 2048 -q -N ""
@@ -333,15 +328,5 @@ sudo mkdir /var/www/html/okd4
 sudo cp -R installdir/* /var/www/html/okd4/
 sudo chown -R apache: /var/www/html/
 sudo chmod -R 755 /var/www/html/
-curl localhost:8080/okd4/metadata.json
 
-cd /var/www/html/okd4/
-sudo wget https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/37.20230205.3.0/x86_64/fedora-coreos-37.20230205.3.0-metal.x86_64.raw.xz
-sudo wget https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/37.20230205.3.0/x86_64/fedora-coreos-37.20230205.3.0-metal.x86_64.raw.xz.sig
-sudo mv fedora-coreos-37.20230205.3.0-metal.x86_64.raw.xz fcos.raw.xz
-sudo mv fedora-coreos-37.20230205.3.0-metal.x86_64.raw.xz.sig fcos.raw.xz.sig
-sudo chown -R apache: /var/www/html/
-sudo chmod -R 755 /var/www/html/
-
-# run VMs and make postinstal commands!!!
 
