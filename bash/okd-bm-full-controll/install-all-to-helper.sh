@@ -148,9 +148,11 @@ console-openshift-console.apps.okd.home.lab.     IN     A     192.168.1.60
 oauth-openshift.apps.okd.home.lab.     IN     A     192.168.1.60
 
 ; OpenShift internal cluster IPs - SRV records
-_etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-0.lab
-; _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-1.lab
-; _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-2.lab
+_etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-0.okd.home.lab.
+; _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-1.okd.home.lab.
+; _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-2.okd.home.lab.
+# _service._proto.name.                            TTL   class SRV priority weight port target.
+
 EOF
 
 ### change install-config.yaml
@@ -175,7 +177,7 @@ networking:
   clusterNetwork:
   - cidr: 10.128.0.0/14 
     hostPrefix: 23 
-  networkType: OpenShiftSDN
+  networkType: OVNKubernetes
   serviceNetwork: 
   - 172.30.0.0/16
 

@@ -1,0 +1,60 @@
+apiVersion: v1
+baseDomain: test.metalkube.org
+metadata:
+  name: ostest
+networking:
+  machineNetwork:
+  - cidr: 192.168.1.0/24
+compute:
+- name: worker
+  replicas: 1
+controlPlane:
+  name: master
+  replicas: 3
+  platform:
+    baremetal: {}
+platform:
+  baremetal:
+    apiVIP: 192.168.1.181
+    ingressVIP: 192.168.1.182
+    hosts:
+      - name: openshift-master-0
+        role: master
+        bmc:
+          address: ipmi://192.168.1.180:6230
+          username: admin
+          password: password
+        bootMACAddress: 62:57:BC:A2:0E:20
+        rootDeviceHints:
+          minSizeGigabytes: 20
+        bootMode: legacy
+      - name: openshift-master-1
+        role: master
+        bmc:
+          address: ipmi://192.168.1.180:6231
+          username: admin
+          password: password
+        bootMACAddress: 62:57:BC:A2:0E:21
+        rootDeviceHints:
+          minSizeGigabytes: 20
+        bootMode: UEFI
+      - name: openshift-master-2
+        role: master
+        bmc:
+          address: ipmi://192.168.1.180:6232
+          username: admin
+          password: password
+        bootMACAddress: 62:57:BC:A2:0E:23
+        rootDeviceHints:
+          minSizeGigabytes: 20
+      - name: openshift-worker-0
+        role: worker
+        bmc:
+          address: ipmi://192.168.1.180:6233
+          username: admin
+          password: password
+        bootMACAddress: 62:57:BC:A2:0E:24
+        rootDeviceHints:
+          minSizeGigabytes: 20
+pullSecret: ...
+sshKey: ...
