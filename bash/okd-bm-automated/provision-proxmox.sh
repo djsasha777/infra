@@ -1,6 +1,6 @@
 #!/bin/bash
 
-qm create 800 --cdrom local:iso/CentOS-Stream-9-latest-x86_64-dvd1.iso \
+qm create 620 --cdrom local:iso/CentOS-Stream-9-latest-x86_64-dvd1.iso \
   --name "okd-bm-auto-helper" --numa 0 --ostype l26 \
   --cpu cputype=host --cores 1 --sockets 1 \
   --memory 2048  \
@@ -8,7 +8,7 @@ qm create 800 --cdrom local:iso/CentOS-Stream-9-latest-x86_64-dvd1.iso \
   --bootdisk scsi0 --scsihw virtio-scsi-pci --scsi0 file=NVME:32 \
   --serial0 socket
 
-qm create 801 --cdrom local:iso/rhcos.iso \
+qm create 621 \
   --name "okd-bm-auto-master-0" --numa 0 --ostype l26 \
   --cpu cputype=host --cores 4 --sockets 1 \
   --memory 16384  \
@@ -16,7 +16,7 @@ qm create 801 --cdrom local:iso/rhcos.iso \
   --bootdisk scsi0 --scsihw virtio-scsi-pci --scsi0 file=NVME:100 \
   --serial0 socket
 
-qm create 802 --cdrom local:iso/rhcos.iso \
+qm create 622 \
   --name "okd-bm-auto-master-1" --numa 0 --ostype l26 \
   --cpu cputype=host --cores 4 --sockets 1 \
   --memory 16384  \
@@ -24,7 +24,7 @@ qm create 802 --cdrom local:iso/rhcos.iso \
   --bootdisk scsi0 --scsihw virtio-scsi-pci --scsi0 file=NVME:100 \
   --serial0 socket
 
-qm create 803 --cdrom local:iso/rhcos.iso \
+qm create 623 \
   --name "okd-bm-auto-master-2" --numa 0 --ostype l26 \
   --cpu cputype=host --cores 2 --sockets 1 \
   --memory 8196  \
@@ -32,7 +32,7 @@ qm create 803 --cdrom local:iso/rhcos.iso \
   --bootdisk scsi0 --scsihw virtio-scsi-pci --scsi0 file=NVME:100 \
   --serial0 socket
 
-qm create 804 --cdrom local:iso/rhcos.iso \
+qm create 624 \
   --name "okd-bm-auto-worker-0" --numa 0 --ostype l26 \
   --cpu cputype=host --cores 2 --sockets 1 \
   --memory 8196  \

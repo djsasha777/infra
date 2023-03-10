@@ -23,5 +23,5 @@ networking:
   - 172.30.0.0/16
 platform:
   none: {}
-pullSecret: '<pull_secret>' 
-sshKey: '<ssh_pub_key>'
+pullSecret: pull_secret
+sshKey: ssh_pub_key
