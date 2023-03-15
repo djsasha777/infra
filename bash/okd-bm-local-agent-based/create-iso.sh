@@ -1,5 +1,6 @@
 #!/bin/bash
 sudo dnf update -y
+sudo dnf install /usr/bin/nmstatectl -y
 cd
 mkdir installdir
 cd installdir
@@ -29,7 +30,7 @@ networking:
   - cidr: 10.128.0.0/14
     hostPrefix: 23
   machineNetwork:
-  - cidr: 192.168.1.0/16
+  - cidr: 192.168.1.0/24
   networkType: OVNKubernetes 
   serviceNetwork:
   - 172.30.0.0/16
@@ -94,8 +95,8 @@ hosts:
 EOF
 
 sudo sed -i 's/IPADDRESS/'$IPADDRESS'/' agent-config.yaml
-sudo sed -i 's/MACADDRESS/name: '$MACADDRESS'/' agent-config.yaml
-sudo sed -i 's/ROUTERIP/name: '$ROUTERIP'/' agent-config.yaml
+sudo sed -i 's/MACADDRESS/'$MACADDRESS'/' agent-config.yaml
+sudo sed -i 's/ROUTERIP/'$ROUTERIP'/' agent-config.yaml
 
 wget ftp://192.168.1.1/AiDisk_a1/repository/openshift-client-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
 wget ftp://192.168.1.1/AiDisk_a1/repository/openshift-install-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
@@ -107,11 +108,13 @@ tar -zxvf openshift-install-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
 #Move the kubectl, oc, and openshift-install to /usr/local/bin and show the version:
 sudo mv kubectl oc openshift-install /usr/local/bin/
 
-openshift-install --dir installdir agent create image
+openshift-install agent create image
 
 ftp -n <<EOF
 open ftp://192.168.1.1/AiDisk_a1/template/iso/
 put agent.x86_64.iso
 EOF
 
-openshift-install --dir installdir agent wait-for bootstrap-complete --log-level=info
+openshift-install agent wait-for bootstrap-complete --log-level=info
+
+openshift-install installdir agent wait-for install-complete

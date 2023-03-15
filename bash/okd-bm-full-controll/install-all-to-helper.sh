@@ -2,7 +2,7 @@
 # This script will install dns server and dns configs on dns-single-node-server
 # sudo dnf install -y epel-release
 # set -e #uncheck for debugging mode
-sudo dnf update -y
+# sudo dnf update -y
 cd
 mkdir installdir
 cd installdir
@@ -37,9 +37,6 @@ options {
                 8.8.8.8;
                 8.8.4.4;
         };
-
-	dnssec-enable yes;
-	dnssec-validation yes;
 
 	/* Path to ISC DLV key */
 	bindkeys-file "/etc/named.root.key";
@@ -97,17 +94,17 @@ cat  >> db.192.168.1 <<EOF
     IN      NS      okd4-services.home.lab.
 
 ; name servers - PTR records
-210    IN    PTR    okd4-services.home.lab.
+60    IN    PTR    okd4-services.home.lab.
 
 ; OpenShift Container Platform Cluster - PTR records
-200    IN    PTR    okd4-bootstrap.okd.home.lab.
-201    IN    PTR    okd4-control-plane-1.okd.home.lab.
+61    IN    PTR    okd4-bootstrap.okd.home.lab.
+62    IN    PTR    okd4-control-plane-1.okd.home.lab.
 ; 202    IN    PTR    okd4-control-plane-2.okd.home.lab.
 ; 203    IN    PTR    okd4-control-plane-3.okd.home.lab.
-204    IN    PTR    okd4-compute-1.okd.home.lab.
+65    IN    PTR    okd4-compute-1.okd.home.lab.
 ; 205    IN    PTR    okd4-compute-2.okd.home.lab.
-210    IN    PTR    api.okd.home.lab.
-210    IN    PTR    api-int.okd.home.lab.
+60    IN    PTR    api.okd.home.lab.
+60    IN    PTR    api-int.okd.home.lab.
 EOF
 
 ### change db.home.lab
@@ -151,8 +148,6 @@ oauth-openshift.apps.okd.home.lab.     IN     A     192.168.1.60
 _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-0.okd.home.lab.
 ; _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-1.okd.home.lab.
 ; _etcd-server-ssl._tcp.okd.home.lab.    86400     IN    SRV     0    10    2380    etcd-2.okd.home.lab.
-# _service._proto.name.                            TTL   class SRV priority weight port target.
-
 EOF
 
 ### change install-config.yaml

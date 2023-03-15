@@ -1,0 +1,41 @@
+$TTL    604800
+@       IN      SOA     ocp-svc.myokd4.lan. contact.myokd4.lan (
+                  1     ; Serial
+             604800     ; Refresh
+              86400     ; Retry
+            2419200     ; Expire
+             604800     ; Minimum
+)
+        IN      NS      myokd4-svc
+
+myokd4-svc.myokd4.lan.          IN      A       192.168.12.1
+
+; Temp Bootstrap Node
+myokd4-bootstrap.lab.myokd4.lan.        IN      A      192.168.12.200
+
+; Control Plane Nodes
+myokd4-master-1.lab.myokd4.lan.         IN      A      192.168.12.201
+;ocp-cp-2.lab.ocp.lan.         IN      A      192.168.12.202
+;ocp-cp-3.lab.ocp.lan.         IN      A      192.168.12.203
+
+; Worker Nodes
+myokd4-worker-1.lab.myokd4.lan.        IN      A      192.168.12.211
+;ocp-w-2.lab.ocp.lan.        IN      A      192.168.12.212
+
+; OpenShift Internal - Load balancer
+api.lab.myokd4.lan.        IN    A    192.168.12.1
+api-int.lab.myokd4.lan.    IN    A    192.168.12.1
+*.apps.lab.myokd4.lan.     IN    A    192.168.12.1
+
+; ETCD Cluster
+etcd-0.lab.myokd4.lan.    IN    A     192.168.12.201
+;etcd-1.lab.myokd4.lan.    IN    A     192.168.12.202
+;etcd-2.lab.myokd4.lan.    IN    A     192.168.12.203
+
+; OpenShift Internal SRV records (cluster name = lab)
+_etcd-server-ssl._tcp.lab.myokd4.lan.    86400     IN    SRV     0    10    2380    etcd-0.lab
+;_etcd-server-ssl._tcp.lab.ocp.lan.    86400     IN    SRV     0    10    2380    etcd-1.lab
+;_etcd-server-ssl._tcp.lab.ocp.lan.    86400     IN    SRV     0    10    2380    etcd-2.lab
+
+oauth-openshift.apps.lab.myokd4.lan.     IN     A     192.168.22.1
+console-openshift-console.apps.lab.myokd4.lan.     IN     A     192.168.22.1

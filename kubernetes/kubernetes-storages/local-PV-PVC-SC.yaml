@@ -15,7 +15,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: local-storage
+  storageClassName: crc-csi-hostpath-provisioner
   capacity:
     storage: 1Gi
   accessModes:
@@ -31,7 +31,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: local-storage
+  storageClassName: crc-csi-hostpath-provisioner
   accessModes:
     - ReadWriteOnce
   resources:
