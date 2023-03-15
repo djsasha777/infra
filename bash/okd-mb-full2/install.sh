@@ -43,6 +43,8 @@ echo "DNS server configuration finished! "
 #  LOAD BALANCER install
 
 echo "HAproxy server software is installed! now configuring!"
+rm /etc/haproxy/haproxy*
+sudo cp -fr provision/bash/okd-mb-full2/haproxy.cfg /etc/haproxy/
 setsebool -P haproxy_connect_any=1
 sudo systemctl enable haproxy
 sudo systemctl restart haproxy  
@@ -76,13 +78,13 @@ sudo mv kubectl oc openshift-install /usr/local/bin/
 #generate ssh key
 sudo ssh-keygen -f cluster-install-ssh -t rsa -b 2048 -q -N ""
 SSHKEY=$(sudo cat cluster-install-ssh.pub)
-sudo sed -Ei "s|SSHKEY|$SSHKEY|g" install-config.yaml
+sudo sed -Ei "s|SSHKEY|$SSHKEY|g" provision/bash/okd-mb-full2/install-config.yaml
 
 echo "please enter pull secret"
 read -r PULLSECRET
-sudo sed -Ei "s|PULLSECRET|$PULLSECRET|g" install-config.yaml
+sudo sed -Ei "s|PULLSECRET|$PULLSECRET|g" provision/bash/okd-mb-full2/install-config.yaml
 
-cd
+cd provision/bash/okd-mb-full2/
 openshift-install create manifests --dir=installdir/
 # This lines disables schedule application pods on the master nodes 
 sed -i 's/mastersSchedulable: true/mastersSchedulable: False/' installdir/manifests/cluster-scheduler-02-config.yml

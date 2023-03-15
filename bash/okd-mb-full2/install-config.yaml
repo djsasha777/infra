@@ -20,5 +20,5 @@ networking:
 platform:
   none: {}
 fips: false
-pullSecret: '{"auths": ...}'
-sshKey: "ssh-ed25519 AAAA..."
+pullSecret: "PULLSECRET"
+sshKey: "SSHKEY"
