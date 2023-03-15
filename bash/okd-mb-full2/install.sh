@@ -3,12 +3,12 @@
 # sudo dnf install -y epel-release
 # set -e #uncheck for debugging mode
 # sudo dnf update -y
-cd
+# git clone https://github.com/djsasha777/provision.git
+# cd provision/bash/okd-mb-full2
+# cd
 mkdir installdir
-cd installdir
-sudo dnf -y install bind bind-utils wget tar git dhcp-server nano haproxy httpd
-
-git clone https://github.com/djsasha777/provision.git
+# cd installdir
+sudo dnf -y install bind bind-utils wget tar dhcp-server nano haproxy httpd
 
 nmcli connection modify ens18 connection.zone external
 nmcli connection modify ens19 connection.zone internal
@@ -19,7 +19,7 @@ firewall-cmd --zone=internal --add-masquerade --permanent
 firewall-cmd --reload
 
 #configure dhcp
-cp -fr provision/bash/okd-mb-full2/dhcpd.conf /etc/dhcp/dhcpd.conf
+cp -fr dhcpd.conf /etc/dhcp/dhcpd.conf
 firewall-cmd --add-service=dhcp --zone=internal --permanent
 firewall-cmd --reload
 sudo systemctl enable dhcpd
@@ -27,9 +27,9 @@ sudo systemctl start dhcpd
 
 # dns configure
 echo "dns files configure"
-sudo cp -fr provision/bash/okd-mb-full2/named.conf /etc/named.conf
+sudo cp -fr named.conf /etc/named.conf
 sudo mkdir /etc/named/zones
-sudo cp -fr provision/bash/okd-mb-full2/db* /etc/named/zones
+sudo cp -fr db* /etc/named/zones
 sudo systemctl enable named
 sudo systemctl start named
 
@@ -44,7 +44,7 @@ echo "DNS server configuration finished! "
 
 echo "HAproxy server software is installed! now configuring!"
 rm /etc/haproxy/haproxy*
-sudo cp -fr provision/bash/okd-mb-full2/haproxy.cfg /etc/haproxy/
+sudo cp -fr haproxy.cfg /etc/haproxy/
 setsebool -P haproxy_connect_any=1
 sudo systemctl enable haproxy
 sudo systemctl restart haproxy  
@@ -85,15 +85,16 @@ read -r PULLSECRET
 sudo sed -Ei "s|PULLSECRET|$PULLSECRET|g" provision/bash/okd-mb-full2/install-config.yaml
 
 cd provision/bash/okd-mb-full2/
-openshift-install create manifests --dir=installdir/
+# openshift-install create manifests --dir=installdir/
 # This lines disables schedule application pods on the master nodes 
-sed -i 's/mastersSchedulable: true/mastersSchedulable: False/' installdir/manifests/cluster-scheduler-02-config.yml
-openshift-install create ignition-configs --dir=installdir/
+# sed -i 's/mastersSchedulable: true/mastersSchedulable: False/' installdir/manifests/cluster-scheduler-02-config.yml
+# openshift-install create ignition-configs --dir=installdir/
+openshift-install create ignition-configs
 
 rm -drf /var/www/html/okd4
 sudo mkdir /var/www/html/okd4
 
-sudo cp -R installdir/* /var/www/html/okd4/
+sudo cp -R * /var/www/html/okd4/
 sudo chown -R apache: /var/www/html/
 sudo chmod -R 755 /var/www/html/
 
