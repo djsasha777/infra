@@ -19,15 +19,17 @@ firewall-cmd --zone=internal --add-masquerade --permanent
 firewall-cmd --reload
 
 #configure dhcp
-cp provision/bash/okd-mb-full2/dhcpd.conf /etc/dhcp/dhcpd.conf
+cp -fr provision/bash/okd-mb-full2/dhcpd.conf /etc/dhcp/dhcpd.conf
 firewall-cmd --add-service=dhcp --zone=internal --permanent
 firewall-cmd --reload
+sudo systemctl enable dhcpd
+sudo systemctl start dhcpd
 
 # dns configure
 echo "dns files configure"
-sudo cp provision/bash/okd-mb-full2/named.conf /etc/named.conf
+sudo cp -fr provision/bash/okd-mb-full2/named.conf /etc/named.conf
 sudo mkdir /etc/named/zones
-sudo cp provision/bash/okd-mb-full2/db* /etc/named/zones
+sudo cp -fr provision/bash/okd-mb-full2/db* /etc/named/zones
 sudo systemctl enable named
 sudo systemctl start named
 
