@@ -36,6 +36,7 @@ sudo systemctl start named
 #add firewall rules
 echo "adding firewall rules"
 sudo firewall-cmd --permanent --add-port=53/udp --zone=internal
+sudo firewall-cmd --permanent --add-port=53/tcp --zone=internal
 sudo firewall-cmd --reload
 
 echo "DNS server configuration finished! "
@@ -50,11 +51,15 @@ sudo systemctl enable haproxy
 sudo systemctl restart haproxy  
 echo "haproxy installation and configuration is DONE"
 echo "add firewall rules"
-sudo firewall-cmd --permanent --add-port=6443/tcp --zone=internal
-sudo firewall-cmd --permanent --add-port=22623/tcp --zone=internal
-sudo firewall-cmd --permanent --add-service=http --zone=internal
-sudo firewall-cmd --permanent --add-service=https --zone=internal
-sudo firewall-cmd --reload
+firewall-cmd --add-port=6443/tcp --zone=internal --permanent # kube-api-server on control plane nodes
+firewall-cmd --add-port=6443/tcp --zone=external --permanent # kube-api-server on control plane nodes
+firewall-cmd --add-port=22623/tcp --zone=internal --permanent # machine-config server
+firewall-cmd --add-service=http --zone=internal --permanent # web services hosted on worker nodes
+firewall-cmd --add-service=http --zone=external --permanent # web services hosted on worker nodes
+firewall-cmd --add-service=https --zone=internal --permanent # web services hosted on worker nodes
+firewall-cmd --add-service=https --zone=external --permanent # web services hosted on worker nodes
+firewall-cmd --add-port=9000/tcp --zone=external --permanent # HAProxy Stats
+firewall-cmd --reload
 echo "firewall rules added"
 
 #httpd install
@@ -78,19 +83,21 @@ sudo mv kubectl oc openshift-install /usr/local/bin/
 #generate ssh key
 sudo ssh-keygen -f cluster-install-ssh -t rsa -b 2048 -q -N ""
 SSHKEY=$(sudo cat cluster-install-ssh.pub)
-sudo sed -Ei "s|SSHKEY|$SSHKEY|g" provision/bash/okd-mb-full2/install-config.yaml
+sudo sed -Ei "s|SSHKEY|$SSHKEY|g" install-config.yaml
 
 echo "please enter pull secret"
 read -r PULLSECRET
-sudo sed -Ei "s|PULLSECRET|$PULLSECRET|g" provision/bash/okd-mb-full2/install-config.yaml
+sudo sed -Ei "s|PULLSECRET|$PULLSECRET|g" install-config.yaml
 
-cd provision/bash/okd-mb-full2/
-# openshift-install create manifests --dir=installdir/
+cd
+openshift-install create manifests --dir=provision/bash/okd-mb-full2/
 # This lines disables schedule application pods on the master nodes 
 # sed -i 's/mastersSchedulable: true/mastersSchedulable: False/' installdir/manifests/cluster-scheduler-02-config.yml
 # openshift-install create ignition-configs --dir=installdir/
-openshift-install create ignition-configs
+openshift-install create ignition-configs --dir=provision/bash/okd-mb-full2/
 
+cd
+cd provision/bash/okd-mb-full2/
 rm -drf /var/www/html/okd4
 sudo mkdir /var/www/html/okd4
 
