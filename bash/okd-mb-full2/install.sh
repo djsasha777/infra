@@ -3,11 +3,10 @@
 # sudo dnf install -y epel-release
 # set -e #uncheck for debugging mode
 sudo dnf update -y
+sudo dnf -y install git bind bind-utils wget tar dhcp-server nano haproxy httpd
+
 git clone https://github.com/djsasha777/provision.git
-# cd
-# mkdir installdir
 cd provision/bash/okd-mb-full2
-sudo dnf -y install bind bind-utils wget tar dhcp-server nano haproxy httpd
 
 nmcli connection modify ens18 connection.zone external
 nmcli connection modify ens19 connection.zone internal
@@ -20,6 +19,7 @@ firewall-cmd --permanent --policy myOutputPolicy --set-target ACCEPT
 firewall-cmd --permanent --policy myOutputPolicy --add-egress-zone external
 firewall-cmd --permanent --policy myOutputPolicy --add-ingress-zone internal
 firewall-cmd --reload
+
 #configure dhcp
 cp -fr dhcpd.conf /etc/dhcp/dhcpd.conf
 firewall-cmd --add-service=dhcp --zone=internal --permanent
@@ -99,7 +99,6 @@ cd
 openshift-install create manifests --dir=provision/bash/okd-mb-full2/
 # This lines disables schedule application pods on the master nodes 
 # sed -i 's/mastersSchedulable: true/mastersSchedulable: False/' installdir/manifests/cluster-scheduler-02-config.yml
-# openshift-install create ignition-configs --dir=installdir/
 openshift-install create ignition-configs --dir=provision/bash/okd-mb-full2/
 
 cd
