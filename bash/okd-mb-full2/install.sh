@@ -2,12 +2,11 @@
 # This script will install dns server and dns configs on dns-single-node-server
 # sudo dnf install -y epel-release
 # set -e #uncheck for debugging mode
-# sudo dnf update -y
-# git clone https://github.com/djsasha777/provision.git
-# cd provision/bash/okd-mb-full2
+sudo dnf update -y
+git clone https://github.com/djsasha777/provision.git
 # cd
-mkdir installdir
-# cd installdir
+# mkdir installdir
+cd provision/bash/okd-mb-full2
 sudo dnf -y install bind bind-utils wget tar dhcp-server nano haproxy httpd
 
 nmcli connection modify ens18 connection.zone external
@@ -16,8 +15,11 @@ nmcli connection modify ens19 connection.zone internal
 #configure zones
 firewall-cmd --zone=external --add-masquerade --permanent
 firewall-cmd --zone=internal --add-masquerade --permanent
+firewall-cmd --permanent --new-policy myOutputPolicy
+firewall-cmd --permanent --policy myOutputPolicy --set-target ACCEPT
+firewall-cmd --permanent --policy myOutputPolicy --add-egress-zone external
+firewall-cmd --permanent --policy myOutputPolicy --add-ingress-zone internal
 firewall-cmd --reload
-
 #configure dhcp
 cp -fr dhcpd.conf /etc/dhcp/dhcpd.conf
 firewall-cmd --add-service=dhcp --zone=internal --permanent
@@ -38,6 +40,8 @@ echo "adding firewall rules"
 sudo firewall-cmd --permanent --add-port=53/udp --zone=internal
 sudo firewall-cmd --permanent --add-port=53/tcp --zone=internal
 sudo firewall-cmd --reload
+
+systemctl restart NetworkManager
 
 echo "DNS server configuration finished! "
 
@@ -69,6 +73,8 @@ sudo systemctl enable httpd
 sudo systemctl start httpd
 sudo firewall-cmd --permanent --add-port=8080/tcp --zone=internal
 sudo firewall-cmd --reload
+
+systemctl restart NetworkManager
 
 wget ftp://192.168.1.1/AiDisk_a1/repository/openshift-client-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
 wget ftp://192.168.1.1/AiDisk_a1/repository/openshift-install-linux-4.12.0-0.okd-2023-03-05-022504.tar.gz
