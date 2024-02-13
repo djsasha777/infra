@@ -110,4 +110,4 @@ sudo cp -R * /var/www/html/okd4/
 sudo chown -R apache: /var/www/html/
 sudo chmod -R 755 /var/www/html/
 
-export KUBECONFIG=/root/provision/bash/okd-mb-full2/kubeconfig
+export KUBECONFIG=/root/provision/bash/okd-mb-full2/auth/kubeconfig
