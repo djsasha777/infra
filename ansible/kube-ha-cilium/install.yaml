@@ -34,6 +34,5 @@
         - libseccomp2
         - pkg-config
         - protobuf-compiler
-        - python-minimal
       when: ansible_distribution == 'Ubuntu'
 
