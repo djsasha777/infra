@@ -1,8 +1,15 @@
-- hosts: "all"
+- hosts: all
   become: yes
 
   tasks:
-   
+  
+   - name: Update all in Ubuntu
+     apt:
+       upgrade: dist
+       update_cache: yes
+       cache_valid_time: 86400 #One day
+     when: ansible_distribution == 'Ubuntu'
+  
    - name: Make the Swap inactive
      command: swapoff -a
 
