@@ -1,10 +1,5 @@
 - hosts: all
-  remote_user: ub
-  become: yes
-  become_method: sudo
-  become_user: root
-  gather_facts: yes
-  connection: ssh
+  remote_user: root
 
   tasks:
   
