@@ -3,9 +3,10 @@
 # boot from NAND
 # download all firmware packages to local disc or flash drive, rename packages to need format
 
-# you need 4 files in this format
+# you need 5 files in this format
 
 ### immortalwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-gpt.bin
+### immortalwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-preloader.bin
 ### immortalwrt-mediatek-filogic-bananapi_bpi-r3-mini-emmc-bl31-uboot.fip
 ### immortalwrt-mediatek-filogic-bananapi_bpi-r3-mini-initramfs-recovery.itb
 ### immortalwrt-mediatek-filogic-bananapi_bpi-r3-mini-squashfs-sysupgrade.itb
