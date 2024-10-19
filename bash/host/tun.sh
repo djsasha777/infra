@@ -24,6 +24,8 @@ EOF
 
 mkdir /etc/tun2socks
 cat  >> /etc/tun2socks/tun2socks.conf <<EOF
+TUNIP=10.10.0.1
+TUNPREFIX=24
 SSPROTOCOL=chacha20-ietf-poly1305
 SSIP=195.0.0.1
 SSPORT=8443
