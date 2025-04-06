@@ -37,35 +37,76 @@ frontend main
 
 backend main
  mode tcp
- acl argo req.ssl_sni -i argo.spongo.ru
- acl gitea req.ssl_sni -i gitea.spongo.ru
- acl vpn req.ssl_sni -i vpn.spongo.ru
- acl nebula req.ssl_sni -i nebula.spongo.ru
- acl router req.ssl_sni -i router.spongo.ru
- acl player req.ssl_sni -i player.spongo.ru
- acl vault req.ssl_sni -i vault.spongo.ru
- acl info req.ssl_sni -i www.spongo.ru
- acl switch req.ssl_sni -i switch.spongo.ru
- acl nexus req.ssl_sni -i nexus.spongo.ru
- acl switch2  req.ssl_sni -i switch2.spongo.ru
- use-server argo if argo
- use-server ingress if gitea
- use-server vpn if vpn
- use-server nebula if nebula
- use-server router if router
- use-server player if player
- use-server ingress if vault
- use-server info if info
- use-server switch if switch
- use-server ingress if nexus
- use-server switch2 if switch2
  option ssl-hello-chk
- server argo 12.12.12.1:443
- server ingress 12.12.12.3:443
- server vpn 127.0.0.1:8443 send-proxy-v2
- server nebula 127.0.0.1:4242
- server router 192.168.49.2:8088
- server player 192.168.49.2:8000
+ 
+# info-homepage
+ acl info req.ssl_sni -i www.spongo.ru
+ use-server info if info
  server info 192.168.49.2:8888
+
+# openconnect
+ acl openconnect req.ssl_sni -i openconnect.spongo.ru
+ use-server openconnect if openconnect
+ server openconnect 127.0.0.1:8443 send-proxy-v2
+
+# nebula
+ acl nebula req.ssl_sni -i nebula.spongo.ru
+ use-server nebula if nebula
+ server nebula 127.0.0.1:4242
+
+# shadowsocks
+ acl shadowsocks req.ssl_sni -i shadowsocks.spongo.ru
+ use-server shadowsocks if shadowsocks
+ server shadowsocks 127.0.0.1:9389
+
+# tinc
+ acl tinc req.ssl_sni -i tinc.spongo.ru
+ use-server tinc if tinc
+ server tinc 127.0.0.1:4244
+
+# argo-cd
+ acl argo req.ssl_sni -i argo.spongo.ru
+ use-server argo if argo
+ server argo 12.12.12.1:443
+
+# gitea
+ acl gitea req.ssl_sni -i gitea.spongo.ru
+ use-server ingress if gitea
+# vault
+ acl vault req.ssl_sni -i vault.spongo.ru
+ use-server ingress if vault
+# nexus
+ acl nexus req.ssl_sni -i nexus.spongo.ru
+ use-server ingress if nexus
+# server ingress
+ server ingress 12.12.12.3:443
+
+# router
+ acl router req.ssl_sni -i router.spongo.ru
+ use-server router if router
+ server router 192.168.49.2:8088
+
+# player
+ acl player req.ssl_sni -i player.spongo.ru
+ use-server player if player
+ server player 192.168.49.2:8000
+
+# switch
+ acl switch req.ssl_sni -i switch.spongo.ru
+ use-server switch if switch
  server switch 192.168.49.2:8886
+
+#switch2
+ acl switch2  req.ssl_sni -i switch2.spongo.ru
+ use-server switch2 if switch2
  server switch2 192.168.49.2:8887
+
+
+
+
+
+
+
+
+
+
