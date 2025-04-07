@@ -1,7 +1,46 @@
 ---
-bind_interface: eth0
-vip: 192.168.1.220
-bind_port: 8383
-keepalived_secret: password
-masterip1: 192.168.1.201
-masterip2: 192.168.1.202
+
+dnsName: spongo.ru
+dnsIp: 91.149.218.39
+
+hostos:
+  - name: info 
+    ip: 192.168.49.2
+    port: 8888
+  - name: openconnect
+    ip: 127.0.0.1
+    port: 8443
+    proxy: true
+  - name: nebula
+    ip: 127.0.0.1
+    port: 4242
+  - name: shadowsocks
+    ip: 127.0.0.1
+    port: 9389
+  - name: tinc
+    ip: 127.0.0.1
+    port: 4244
+  - name: argo
+    ip: 12.12.12.1
+    port: 443
+  - name: gitea
+    ip: 12.12.12.3
+    port: 443
+  - name: vault
+    ip: 12.12.12.3
+    port: 443
+  - name: nexus
+    ip: 12.12.12.3
+    port: 443
+  - name: router
+    ip: 192.168.49.2
+    port: 8808
+  - name: player
+    ip: 192.168.49.2
+    port: 8000
+  - name: switch
+    ip: 192.168.49.2
+    port: 8886
+  - name: switch2
+    ip: 192.168.49.2
+    port: 8887
