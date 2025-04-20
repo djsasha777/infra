@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # add rule for wan gui
 
 uci add firewall rule
