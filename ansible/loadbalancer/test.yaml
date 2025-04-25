@@ -1,0 +1,11 @@
+---
+- name: test
+  hosts: server
+  vars:
+    ansible_user: root
+  tasks:
+
+    - name: test
+      ansible.builtin.command:
+        cmd: >-
+          echo "TESTING............"

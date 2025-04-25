@@ -1,0 +1,79 @@
+---
+
+dnsName: spongo.ru
+dnsIp: 91.149.218.39
+
+haproxy:
+  - name: www
+    ip: 192.168.49.2
+    port: 8888
+    proxy: false
+  - name: vpn
+    ip: 127.0.0.1
+    port: 9443
+    proxy: false
+  - name: nebula
+    ip: 127.0.0.1
+    port: 4242
+    proxy: false
+  - name: shadowsocks
+    ip: 127.0.0.1
+    port: 9389
+    proxy: false
+  - name: argo
+    ip: 12.12.12.1
+    port: 443
+    proxy: false
+  - name: gitea
+    ip: 12.12.12.3
+    port: 443
+    proxy: false
+  - name: vault
+    ip: 12.12.12.3
+    port: 443
+    proxy: false
+  - name: nexus
+    ip: 12.12.12.3
+    port: 443
+    proxy: false
+  - name: router
+    ip: 192.168.49.2
+    port: 8808
+    proxy: false
+  - name: player
+    ip: 192.168.49.2
+    port: 8000
+    proxy: false
+  - name: switch
+    ip: 192.168.49.2
+    port: 8886
+    proxy: false
+  - name: switch2
+    ip: 192.168.49.2
+    port: 8887
+    proxy: false
+
+nebula:
+  localIp: 192.168.49.1
+  dir: /etc/nebula
+  routerDir: /opt/nebula
+  url: https://github.com/slackhq/nebula/releases/download/v1.9.5/nebula-linux-amd64.tar.gz
+  caName: SPONGO INC
+  duration: 175200h
+  clients:
+    lighthouse:
+      ip: 192.168.49.1/24
+    router:
+      ip: 192.168.49.2/24
+    mac:
+      ip: 192.168.49.3/24
+    iphone:
+      ip: 192.168.49.4/24
+
+openconnect:
+  ipNetwork: 192.168.50.0
+  ipMask: 255.255.255.0
+  cn: SPONGO OC
+  organization: SPONGO INC
+  pam: true
+  dnsName: vpn.spongo.ru
