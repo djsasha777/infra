@@ -16,7 +16,7 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v3
         with:
           playbook: test.yaml
-          directory: ./
+          directory: ansible/loadbalancer/
           key: ${{ secrets.PRIVATE }}
           options: |
             --inventory hosts.yaml
