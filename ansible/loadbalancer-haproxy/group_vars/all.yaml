@@ -38,7 +38,7 @@ haproxy:
     proxy: false
   - name: router
     ip: 192.168.49.2
-    port: 8808
+    port: 8088
     proxy: false
   - name: player
     ip: 192.168.49.2
