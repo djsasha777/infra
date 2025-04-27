@@ -1,9 +1,9 @@
-name: loadbalancer-ss
+name: loadbalancer-shadowsocks
 on:
   push:
     branches: [ "main" ]
     paths:
-      - ansible/loadbalancer-ss/**
+      - ansible/loadbalancer-shadowsocks/**
 
   workflow_dispatch:
 jobs:
@@ -16,8 +16,8 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v3
         with:
           playbook: test.yaml
-          directory: ansible/loadbalancer-ss/
+          directory: ansible/loadbalancer-shadowsocks/
           key: ${{ secrets.PRIVATE }}
           options: |
-            --inventory hosts.yaml
+            --inventory shadowsocks.yaml
             --extra-vars sspassword=${{ secrets.SSPASS }}
