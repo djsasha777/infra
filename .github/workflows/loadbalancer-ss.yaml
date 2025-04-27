@@ -1,0 +1,23 @@
+name: loadbalancer-ss
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - ansible/loadbalancer-ss/**
+
+  workflow_dispatch:
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run playbook
+        uses: dawidd6/action-ansible-playbook@v3
+        with:
+          playbook: test.yaml
+          directory: ansible/lloadbalancer-ss/
+          key: ${{ secrets.PRIVATE }}
+          options: |
+            --inventory hosts.yaml
+            --extra-vars sspassword=${{ secrets.SSPASS }}

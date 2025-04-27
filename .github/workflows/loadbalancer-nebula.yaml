@@ -1,9 +1,9 @@
-name: loadbalancer
+name: loadbalancer-nebula
 on:
   push:
     branches: [ "main" ]
     paths:
-      - ansible/loadbalancer/**
+      - ansible/loadbalancer-nebula/**
 
   workflow_dispatch:
 jobs:
@@ -16,8 +16,7 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v3
         with:
           playbook: test.yaml
-          directory: ansible/loadbalancer/
+          directory: ansible/loadbalancer-nebula/
           key: ${{ secrets.PRIVATE }}
           options: |
             --inventory hosts.yaml
-            --extra-vars sspassword=${{ secrets.SSPASS }}
