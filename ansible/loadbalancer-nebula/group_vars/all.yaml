@@ -6,7 +6,6 @@ dnsIp: 91.149.218.39
 nebula:
   localIp: 192.168.49.1
   dir: /etc/nebula
-  routerDir: /opt/nebula
   url: https://github.com/slackhq/nebula/releases/download/v1.9.5/nebula-linux-amd64.tar.gz
   caName: SPONGO INC
   duration: 175200h
