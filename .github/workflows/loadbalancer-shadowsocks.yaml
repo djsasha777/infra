@@ -19,5 +19,5 @@ jobs:
           directory: ansible/loadbalancer-shadowsocks/
           key: ${{ secrets.PRIVATE }}
           options: |
-            --inventory shadowsocks.yaml
+            --inventory hosts.yaml
             --extra-vars sspassword=${{ secrets.SSPASS }}
