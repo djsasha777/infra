@@ -15,7 +15,7 @@ jobs:
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v3
         with:
-          playbook: test.yaml
+          playbook: shadowsocks.yaml
           directory: ansible/loadbalancer-shadowsocks/
           key: ${{ secrets.PRIVATE }}
           options: |
