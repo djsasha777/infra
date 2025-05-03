@@ -36,7 +36,7 @@ haproxy:
     ip: 12.12.12.1
     port: 443
     proxy: false
-  - name: router
+  - name: webdaw
     ip: 192.168.49.2
     port: 8088
     proxy: false
