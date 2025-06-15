@@ -10,3 +10,9 @@ openconnect:
   organization: SPONGO INC
   pam: true
   dnsName: vpn.spongo.ru
+
+clientsRoutes:
+  - network: 15.15.15.0
+    prefix: 255.255.255.0
+  - network: 16.16.16.0
+    prefix: 255.255.255.0
