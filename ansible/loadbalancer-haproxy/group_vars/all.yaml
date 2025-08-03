@@ -44,14 +44,6 @@ haproxy:
     ip: 192.168.49.2
     port: 8000
     proxy: false
-  - name: switch
-    ip: 192.168.49.2
-    port: 8886
-    proxy: false
-  - name: switch2
-    ip: 192.168.49.2
-    port: 8887
-    proxy: false
   - name: home
     ip: 192.168.49.2
     port: 8899
