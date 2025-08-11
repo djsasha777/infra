@@ -2,6 +2,8 @@
 
 dnsName: spongo.ru
 dnsIp: 91.149.218.39
+acmeRemoteIp: 192.168.49.2
+acmeRemotePort: 9090
 
 haproxy:
   - name: www

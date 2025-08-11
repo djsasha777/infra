@@ -28,7 +28,6 @@ defaults
 
 frontend main
  bind {{ dnsIp }}:443
-# bind {{ dnsIp }}:80
  mode tcp
  tcp-request inspect-delay 5s
  tcp-request content accept if { req.ssl_hello_type 1 }
@@ -46,3 +45,10 @@ backend main
  server {{ host.name }} {{ host.ip }}:{{ host.port }} {% if host.proxy == true %} send-proxy-v2 {% endif %}
 
 {% endfor %}
+
+frontend acme
+ bind {{ dnsIp }}:80
+ default_backend acme
+
+backend acme
+ server web {{ acmeRemoteIp }}:{{ acmeRemotePort }} check
