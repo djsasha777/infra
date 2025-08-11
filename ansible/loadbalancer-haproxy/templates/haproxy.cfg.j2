@@ -24,6 +24,14 @@ defaults
 	errorfile 503 /etc/haproxy/errors/503.http
 	errorfile 504 /etc/haproxy/errors/504.http
 
+frontend acme
+ bind {{ dnsIp }}:80
+ mode http
+ default_backend acme
+
+backend acme
+ server web {{ acmeRemoteIp }}:{{ acmeRemotePort }}
+
 #DNS FORWARDER
 
 frontend main
@@ -45,11 +53,3 @@ backend main
  server {{ host.name }} {{ host.ip }}:{{ host.port }} {% if host.proxy == true %} send-proxy-v2 {% endif %}
 
 {% endfor %}
-
-frontend acme
- bind {{ dnsIp }}:80
- mode http
- default_backend acme
-
-backend acme
- server web {{ acmeRemoteIp }}:{{ acmeRemotePort }}
