@@ -48,7 +48,8 @@ backend main
 
 frontend acme
  bind {{ dnsIp }}:80
+ mode http
  default_backend acme
 
 backend acme
- server web {{ acmeRemoteIp }}:{{ acmeRemotePort }} check
+ server web {{ acmeRemoteIp }}:{{ acmeRemotePort }}
