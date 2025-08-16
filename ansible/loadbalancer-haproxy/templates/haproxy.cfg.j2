@@ -30,21 +30,16 @@ frontend acme
  default_backend acme
 
 backend acme
-
  #root acme
- acl root {{ dnsName }}
+ acl root -i {{ dnsName }}
  use-server root if root
  server root {{ acmeRoot.ip }}:{{ acmeRoot.port }}
-
 {% for host in acmeSubdomain %}
-
  #{{ host.name }}
- acl {{ host.name }} {{ host.name }}.{{ dnsName }}
+ acl {{ host.name }} -i {{ host.name }}.{{ dnsName }}
  use-server {{ host.name }} if {{ host.name }}
  server {{ host.name }} {{ host.ip }}:{{ host.port }}
-
 {% endfor %}
-
 #DNS FORWARDER
 
 frontend main
@@ -63,12 +58,9 @@ backend main
  acl haproxyRoot req.ssl_sni -i {{ dnsName }}
  use-server haproxyRoot if haproxyRoot
  server haproxyRoot {{ haproxyRoot.ip }}:{{ haproxyRoot.port }}
-
 {% for host in haproxySubdomain %}
-
  #{{ host.name }}
  acl {{ host.name }} req.ssl_sni -i {{ host.name }}.{{ dnsName }}
  use-server {{ host.name }} if {{ host.name }}
  server {{ host.name }} {{ host.ip }}:{{ host.port }} {% if host.proxy == true %} send-proxy-v2 {% endif %}
-
 {% endfor %}
