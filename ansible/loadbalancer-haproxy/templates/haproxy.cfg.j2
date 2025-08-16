@@ -32,14 +32,14 @@ frontend acme
 backend acme
  mode http
  #root acme
- acl root -i {{ dnsName }}
+ acl root hdr(host) -i {{ dnsName }}
  use-server root if root
  server root {{ acmeRoot.ip }}:{{ acmeRoot.port }}
 
 {% for host in acmeSubdomain %}
 
  #{{ host.name }}
- acl {{ host.name }} -i {{ host.name }}.{{ dnsName }}
+ acl {{ host.name }} hdr(host) -i {{ host.name }}.{{ dnsName }}
  use-server {{ host.name }} if {{ host.name }}
  server {{ host.name }} {{ host.ip }}:{{ host.port }}
 
