@@ -11,10 +11,16 @@ acmeSubdomain:
   - name: argo
     ip: 12.12.12.0
     port: 80
-  - name: certmanager
+  - name: gitea
     ip: 12.12.12.1
     port: 80
-
+  - name: vault
+    ip: 12.12.12.1
+    port: 80
+  - name: nexus
+    ip: 12.12.12.1
+    port: 80
+    
 haproxyRoot:
   ip: 192.168.49.2
   port: 8888
