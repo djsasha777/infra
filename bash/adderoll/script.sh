@@ -5,7 +5,7 @@ read -p "Введите name: " name
 read -p "Введите ip: " ip
 read -p "Введите port: " port
 
-file="val.yaml"
+file="values.yaml"
 
 # Проверка, существует ли запись с таким name
 exists=$(yq e ".acmeSubdomain[] | select(.name == \"$name\")" $file)
