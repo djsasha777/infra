@@ -1,0 +1,7 @@
+acmeSubdomain:
+  - name: argo
+    ip: 12.12.12.0
+    port: 80
+  - name: gitea
+    ip: 12.12.12.1
+    port: 80
