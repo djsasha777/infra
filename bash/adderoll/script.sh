@@ -11,11 +11,12 @@ file="values.yaml"
 exists=$(yq e ".acmeSubdomain[] | select(.name == \"$name\")" $file)
 
 if [ -n "$exists" ]; then
-  # Если существует, заменяем запись с именем $name на новые значения
-  yq e -i "(.acmeSubdomain[] | select(.name == \"$name\")) |= {name: \"$name\", ip: \"$ip\", port: $port}" $file
+  # Обновляем ip и port по отдельности
+  yq e -i "(.acmeSubdomain[] | select(.name == \"$name\") | .ip) = \"$ip\"" $file
+  yq e -i "(.acmeSubdomain[] | select(.name == \"$name\") | .port) = $port" $file
   echo "Запись с name='$name' обновлена."
 else
-  # Если не существует, добавляем новую запись в список
+  # Добавляем новую запись
   yq e -i ".acmeSubdomain += [{name: \"$name\", ip: \"$ip\", port: $port}]" $file
   echo "Новая запись с name='$name' добавлена."
 fi
