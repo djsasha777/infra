@@ -1,86 +1,87 @@
----
-
-dnsName: spongo.ru
-dnsIp: 91.149.218.39
-
 acmeRoot:
   ip: 192.168.49.2
   port: 9090
-
 acmeSubdomain:
-  - name: argo
-    ip: 12.12.12.0
-    port: 80
-  - name: gitea
-    ip: 12.12.12.1
-    port: 80
-  - name: vault
-    ip: 12.12.12.1
-    port: 80
-  - name: nexus
-    ip: 12.12.12.1
-    port: 80
-  - name: n8n
-    ip: 12.12.12.1
-    port: 80
-  - name: rocketchat
-    ip: 12.12.12.1
-    port: 80
-    
+- ip: 12.12.12.0
+  name: argo
+  port: 80
+- ip: 12.12.12.1
+  name: gitea
+  port: 80
+- ip: 12.12.12.1
+  name: vault
+  port: 80
+- ip: 12.12.12.1
+  name: nexus
+  port: 80
+- ip: 12.12.12.1
+  name: n8n
+  port: 80
+- ip: 12.12.12.1
+  name: rocketchat
+  port: 80
+- ip: 12.12.12.1
+  name: iot
+  port: 80
+dnsIp: 91.149.218.39
+dnsName: spongo.ru
 haproxyRoot:
   ip: 192.168.49.2
   port: 8888
-
 haproxySubdomain:
-  - name: www
-    ip: 192.168.49.2
-    port: 8888
-    proxy: false
-  - name: vpn
-    ip: 127.0.0.1
-    port: 9443
-    proxy: false
-  - name: nebula
-    ip: 127.0.0.1
-    port: 4242
-    proxy: false
-  - name: shadowsocks
-    ip: 127.0.0.1
-    port: 9389
-    proxy: false
-  - name: argo
-    ip: 12.12.12.0
-    port: 443
-    proxy: false
-  - name: gitea
-    ip: 12.12.12.1
-    port: 443
-    proxy: false
-  - name: vault
-    ip: 12.12.12.1
-    port: 443
-    proxy: false
-  - name: nexus
-    ip: 12.12.12.1
-    port: 443
-    proxy: false
-  - name: webdaw
-    ip: 192.168.49.2
-    port: 8088
-    proxy: false
-  - name: player
-    ip: 192.168.49.2
-    port: 8000
-    proxy: false
-  - name: home
-    ip: 192.168.49.2
-    port: 8899
-    proxy: false
-  - name: n8n
-    ip: 12.12.12.1
-    port: 443
-    proxy: false
-  - name: rocketchat
-    ip: 12.12.12.1
-    port: 443
-    proxy: false
+- ip: 192.168.49.2
+  name: www
+  port: 8888
+  proxy: false
+- ip: 127.0.0.1
+  name: vpn
+  port: 9443
+  proxy: false
+- ip: 127.0.0.1
+  name: nebula
+  port: 4242
+  proxy: false
+- ip: 127.0.0.1
+  name: shadowsocks
+  port: 9389
+  proxy: false
+- ip: 12.12.12.0
+  name: argo
+  port: 443
+  proxy: false
+- ip: 12.12.12.1
+  name: gitea
+  port: 443
+  proxy: false
+- ip: 12.12.12.1
+  name: vault
+  port: 443
+  proxy: false
+- ip: 12.12.12.1
+  name: nexus
+  port: 443
+  proxy: false
+- ip: 192.168.49.2
+  name: webdaw
+  port: 8088
+  proxy: false
+- ip: 192.168.49.2
+  name: player
+  port: 8000
+  proxy: false
+- ip: 192.168.49.2
+  name: home
+  port: 8899
+  proxy: false
+- ip: 12.12.12.1
+  name: n8n
+  port: 443
+  proxy: false
+- ip: 12.12.12.1
+  name: rocketchat
+  port: 443
+  proxy: false
+- ip: 12.12.12.1
+  name: iot
+  port: 443
+  proxy: false
