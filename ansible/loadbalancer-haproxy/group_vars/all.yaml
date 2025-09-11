@@ -20,6 +20,9 @@ acmeSubdomain:
 - ip: 12.12.12.1
   name: rocketchat
   port: 80
+- ip: 12.12.12.1
+  name: iot
+  port: 80
 dnsIp: 91.149.218.39
 dnsName: spongo.ru
 haproxyRoot:
@@ -76,5 +79,9 @@ haproxySubdomain:
   proxy: false
 - ip: 12.12.12.1
   name: rocketchat
+  port: 443
+  proxy: false
+- ip: 12.12.12.1
+  name: iot
   port: 443
   proxy: false
